@@ -1,5 +1,5 @@
-import ExampleComponent from './ExampleComponent';
+import NavigationBar from './NavigationBar';
 
 export {
-	ExampleComponent,
+	NavigationBar,
 };

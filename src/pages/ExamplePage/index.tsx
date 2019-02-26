@@ -1,15 +1,13 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ExampleComponent } from '../../components';
+import { NavigationBar } from '../../components';
 
 const HomeWrap = styled.div`
 		display:flex;
 		height: 100%;
 	> img {
-		width: 45%;
+		width: 40%;
 		height: 100vh;
-		/* background-image: url(${(props: any) => props.brainBackground}); */
-		/* background: red; */
 	}
 `;
 
@@ -20,8 +18,8 @@ class Home extends React.PureComponent {
 
 		return (
 			<HomeWrap brainBackground={brainBackground}>
-				<img src={brainBackground}/>
-				<ExampleComponent />
+				<img src={brainBackground} />
+				<NavigationBar />
 			</HomeWrap>
 		);
 	}
