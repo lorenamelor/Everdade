@@ -1,5 +1,9 @@
-import ExamplePage from './ExamplePage';
+import Home from './Home';
+import ViewClass from './ViewClass';
+import ViewJF from './ViewJF'
 
 export {
-	ExamplePage,
+	Home,
+	ViewClass,
+	ViewJF
 };

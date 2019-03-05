@@ -9,6 +9,10 @@
 	},
 	"rules": {
 		"jsx-boolean-value": false,
-		"object-literal-sort-keys": false
-	}
+    "object-literal-sort-keys": false,
+    "no-console": false
+  },
+  "jsRules": {
+    "no-console": false
+  }
 }
