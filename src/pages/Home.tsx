@@ -2,6 +2,8 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { listItems } from '../assets/mock'
 import { H1, NavigationBar, SimpleList } from '../components';
+import { Start } from '../pages';
+
 
 const HomeWrap = styled.div`
 		display:flex;
@@ -46,6 +48,7 @@ class Home extends React.PureComponent {
 				</div>
 				<div>
 					<NavigationBar />
+					<Start/>
 					<div>
 						<H1>Turmas</H1>
 						<SimpleList listItems={listItems} />

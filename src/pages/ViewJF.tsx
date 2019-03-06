@@ -1,32 +1,46 @@
 
 import Card from '@material-ui/core/Card';
+import { connect } from 'react-redux';
 
 import * as React from 'react';
+import { IRootState } from 'src/store';
+import { selectLoginType } from 'src/store/app/state';
 import styled from 'styled-components';
 import { listFacts, listJF, listTeam } from '../assets/mock'
-import { ExpansionPanel, H1, InfoJF, NavigationBar } from '../components';
+import { ExpansionPanel, H1, InfoJF, NavigationBar, Topics } from '../components';
+import { Start } from '../pages';
 
-class ViewJF extends React.PureComponent {
+class ViewJF extends React.PureComponent<IMapStateToProps> {
 
   public render() {
+
+    const { loginType } = this.props;
     return (
       <ViewJFWrap>
-        <NavigationBar max returnUrl='/turma'/>
+        <NavigationBar max returnUrl='/turma' />
+        <Start />
         <div>
           <H1>Julgamento de fatos sobre casos de uso</H1>
-          <Card className='card'><InfoJF item={listJF[0]}/></Card>
+          <Card className='card'><InfoJF item={listJF[0]} /></Card>
           <div className='body'>
             <div>
-              <H1>Fatos</H1>
-              <ExpansionPanel items={listFacts} type='fact' />
+              <H1>{loginType === 'professor' ? 'Equipes' : 'Equipe'}</H1>
+              <ExpansionPanel type='team' items={loginType === 'professor' ? listTeam : [listTeam[0]]} />
+              {loginType !== 'professor' ?
+                <>
+                <H1>Topicos</H1>
+                <Topics />
+                </>
+                : null
+              }
             </div>
             <div>
-              <H1>Equipes</H1>
-              <ExpansionPanel items={listTeam} type='team' />
+              <H1>Fatos</H1>
+              <ExpansionPanel type='fact' items={listFacts} />
             </div>
           </div>
         </div>
-      </ViewJFWrap>
+      </ViewJFWrap >
     );
   }
 }
@@ -36,10 +50,7 @@ const ViewJFWrap = styled.div`
     padding-left: 25px;
     padding-right: 25px;
     .body{
-      display:flex;
       >div{
-        flex-grow: 1;
-        width:50%;
         :first-child{
           margin-right:5px;
         }
@@ -54,5 +65,12 @@ const ViewJFWrap = styled.div`
   }
 `;
 
+interface IMapStateToProps {
+  loginType: 'professor' | 'aluno';
+};
 
-export default ViewJF;
+const mapStateToProps = (state: IRootState): IMapStateToProps => ({
+  loginType: selectLoginType(state),
+});
+
+export default connect(mapStateToProps)(ViewJF);

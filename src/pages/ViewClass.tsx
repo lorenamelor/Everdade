@@ -1,20 +1,25 @@
 import Btn from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
-import { listJF } from '../assets/mock'
+import { connect } from 'react-redux';
+import { listJF } from '../assets/mock';
+import { Start } from '../pages';
+
 
 import * as React from 'react';
+import { IRootState } from 'src/store';
+import { selectLoginType } from 'src/store/app/state';
 import styled from 'styled-components';
-import { ExpansionPanel, H1, KeepJF,Modal, NavigationBar } from '../components';
+import { ExpansionPanel, H1, KeepJF, Modal, NavigationBar } from '../components';
 
 // tslint:disable-next-line:no-empty-interface
-interface IProps{
+interface IProps {
 
 }
-interface IState{
+interface IState {
   open: boolean;
 }
 
-class ViewClass extends React.PureComponent<IProps,IState> {
+class ViewClass extends React.PureComponent<IProps & IMapStateToProps, IState> {
   public state = {
     open: false,
   };
@@ -26,11 +31,14 @@ class ViewClass extends React.PureComponent<IProps,IState> {
   public handleClose = () => {
     this.setState({ open: false });
   };
-
   public render() {
+
+    const { loginType } = this.props;
+
     return (
       <ViewClassWrap>
-        <NavigationBar max returnUrl='/home'/>
+        <NavigationBar max returnUrl='/home' />
+        <Start/>
         <div>
           <H1>Turma exemplo</H1>
           <Card className='card'>
@@ -51,11 +59,11 @@ class ViewClass extends React.PureComponent<IProps,IState> {
           </Card>
           <div className='title-jf'>
             <span><H1>Julgamento de Fatos</H1></span>
-            <Button onClick={this.handleOpen}>Cadastrar JF</Button>
+            {loginType === 'professor' ? <Button onClick={this.handleOpen}>Cadastrar JF</Button> : null}
           </div>
           <ExpansionPanel items={listJF} buttons type='jf'/>
         </div>
-        <Modal openModal={this.state.open} handleClose={this.handleClose} description={<KeepJF/>}/> 
+        <Modal openModal={this.state.open} handleClose={this.handleClose} description={<KeepJF />} />
       </ViewClassWrap>
     );
   }
@@ -108,4 +116,12 @@ const Button = styled(Btn) `
  }
 `
 
-export default ViewClass;
+interface IMapStateToProps {
+  loginType: 'professor' | 'aluno';
+};
+
+const mapStateToProps = (state: IRootState): IMapStateToProps => ({
+  loginType: selectLoginType(state),
+});
+
+export default connect(mapStateToProps)(ViewClass);

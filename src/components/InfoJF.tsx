@@ -29,6 +29,7 @@ const InfoJS: React.SFC<Iprops> = ({item}) => {
 const Details = styled.div`
     display:flex;
     flex-direction: wrap;
+    flex-wrap: wrap;
     justify-content: space-between;
     padding-right: 50px;
     flex-grow: 1;

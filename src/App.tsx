@@ -4,13 +4,14 @@ import { Route } from 'react-router-dom';
 
 // Pages
 
-import { Home , ViewClass, ViewJF } from './pages';
+import { Home, Start, ViewClass, ViewJF } from './pages';
 
 class App extends React.Component {
   public render() {
     return (
       <div className="App">
-				<Route exact path='/home' component={Home} />
+        <Route exact path='/' component={Start} />
+        <Route exact path='/home' component={Home} />
         <Route exact path='/turma' component={ViewClass} />
         <Route exact path='/jf' component={ViewJF} />
       </div>

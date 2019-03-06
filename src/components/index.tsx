@@ -9,6 +9,7 @@ import KeepJF from './KeepJF'
 import Modal from './Modal'
 import NavigationBar from './NavigationBar';
 import SimpleList from './SimpleList';
+import Topics from './Topics';
 
 export {
 	ActionsButtons,
@@ -22,4 +23,5 @@ export {
 	Modal,
 	NavigationBar,
 	SimpleList,
+	Topics,
 };

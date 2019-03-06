@@ -4,28 +4,29 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 interface IProps{
-  onClick?: () => void;
+  handleClick?: any;
   children: string;
+  delet?: boolean;
 }
 
-const Button: React.SFC<IProps> = ({onClick, children}) => {
+const Button: React.SFC<IProps> = ({handleClick, delet, children}) => {
 
   return (
-    <ButtonStyled onClick={onClick}>{children}</ButtonStyled>
+    <ButtonStyled delet={delet} onClick={handleClick}>{children}</ButtonStyled>
   );
 
 }
 
 const ButtonStyled = styled(Btn) `
  &&{ 
-   background-color: #096F66;
+   background-color: ${(props: any) => props.delet ? '#DB4437' : '#096F66' };
    color: #FFF;
    min-height: 30px;
    align-items: center;
    line-height: unset;
 
    :hover{
-    background-color: #096F66;
+    background-color: ${(props: any) => props.delet ? '#DB4437' : '#096F66' };
    }
  }
 `

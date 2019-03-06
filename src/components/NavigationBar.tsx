@@ -41,7 +41,7 @@ const MinNavigation = styled.div`
 	display:flex;
 	flex-direction: row-reverse;
 	align-items: center;
-	> img {
+	 img {
 		width: 26px;
 		height: 28px;
 		margin-right: 10px;
