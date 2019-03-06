@@ -26,6 +26,7 @@ class ViewJF extends React.PureComponent<IMapStateToProps> {
             <div>
               <H1>{loginType === 'professor' ? 'Equipes' : 'Equipe'}</H1>
               <ExpansionPanel type='team' items={loginType === 'professor' ? listTeam : [listTeam[0]]} />
+
               {loginType !== 'professor' ?
                 <>
                 <H1>Topicos</H1>
@@ -33,6 +34,7 @@ class ViewJF extends React.PureComponent<IMapStateToProps> {
                 </>
                 : null
               }
+
             </div>
             <div>
               <H1>Fatos</H1>

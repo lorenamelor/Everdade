@@ -1,4 +1,5 @@
 import ActionsButtons from './ActionsButtons';
+import AnswerFact from './AnswerFact';
 import Button from './Button';
 import ExpansionPanel from './ExpansionPanel';
 import H1 from './H1';
@@ -13,6 +14,7 @@ import Topics from './Topics';
 
 export {
 	ActionsButtons,
+	AnswerFact,
 	Button,
 	ExpansionPanel,
 	H1,

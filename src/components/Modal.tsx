@@ -7,11 +7,12 @@ interface IProps {
   handleClose: () => void;
   openModal: boolean;
   description: any;
+  width: any;
 }
 
 class SimpleModal extends React.Component<IProps> {
   public render() {
-    const { openModal, handleClose, description } = this.props;
+    const { openModal, handleClose, description, width } = this.props;
 
     return (
       <Modal
@@ -20,7 +21,7 @@ class SimpleModal extends React.Component<IProps> {
         open={openModal}
         onClose={handleClose}
       >
-        <ModalWrap>
+        <ModalWrap width={width}>
           {description}
         </ModalWrap>
       </Modal>
@@ -30,7 +31,7 @@ class SimpleModal extends React.Component<IProps> {
 
 const ModalWrap = styled.div`
     max-width: 85%;
-    width:85%;
+    width: ${(props: any) => props.width}
     max-height:85%;
     background-color: #FFF;
     border-radius: 5px;

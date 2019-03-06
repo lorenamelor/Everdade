@@ -63,7 +63,7 @@ class ViewClass extends React.PureComponent<IProps & IMapStateToProps, IState> {
           </div>
           <ExpansionPanel items={listJF} buttons type='jf'/>
         </div>
-        <Modal openModal={this.state.open} handleClose={this.handleClose} description={<KeepJF />} />
+        <Modal openModal={this.state.open} handleClose={this.handleClose} description={<KeepJF />} width='85%'/>
       </ViewClassWrap>
     );
   }

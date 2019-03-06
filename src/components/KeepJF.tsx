@@ -8,9 +8,7 @@ import { listItems } from '../assets/mock'
 import { Button, H1 } from '../components'
 
 // tslint:disable-next-line:no-empty-interface
-interface IProps {
-
-}
+interface IProps {}
 
 class KeepJF extends React.Component<IProps> {
   public render() {
