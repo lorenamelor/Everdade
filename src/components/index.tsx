@@ -6,6 +6,7 @@ import H1 from './H1';
 import InfoFact from './InfoFact';
 import InfoJF from './InfoJF';
 import InfoTeam from './InfoTeam';
+import KeepClass from './KeepClass'
 import KeepJF from './KeepJF'
 import Modal from './Modal'
 import NavigationBar from './NavigationBar';
@@ -21,6 +22,7 @@ export {
 	InfoFact,
 	InfoTeam,
 	InfoJF,
+	KeepClass,
 	KeepJF,
 	Modal,
 	NavigationBar,

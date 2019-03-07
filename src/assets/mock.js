@@ -3,6 +3,18 @@ export const listItems = [
   {cod: 2,name: 'Turma de Sistemas de informação B'},
   {cod: 3,name: 'Turma de Sistemas de informação C'},
   {cod: 4,name: 'Turma de Sistemas de informação D'},
+  {cod: 1,name: 'Turma de Sistemas de informação A'},
+  {cod: 2,name: 'Turma de Sistemas de informação B'},
+  {cod: 3,name: 'Turma de Sistemas de informação C'},
+  {cod: 4,name: 'Turma de Sistemas de informação D'},
+  {cod: 1,name: 'Turma de Sistemas de informação A'},
+  {cod: 2,name: 'Turma de Sistemas de informação B'},
+  {cod: 3,name: 'Turma de Sistemas de informação C'},
+  {cod: 4,name: 'Turma de Sistemas de informação D'},
+  {cod: 1,name: 'Turma de Sistemas de informação A'},
+  {cod: 2,name: 'Turma de Sistemas de informação B'},
+  {cod: 3,name: 'Turma de Sistemas de informação C'},
+  {cod: 4,name: 'Turma de Sistemas de informação D'},
 ]
 
 export const listJF = [
@@ -25,3 +37,7 @@ export const listTeam = [
   {cod: 3,name: 'Equipe C', qtdMembros: 5, lider: 'João Mendes', acertos: 20, erros:10, acertosNominais: 10, acertosReais: 15, membros:['Maria Clara','João Antonio','Eleonora de Melo','Pedro Quiroz','José Eustáquio']},
   {cod: 4,name: 'Equipe D', qtdMembros: 5, lider: 'João Mendes', acertos: 20, erros:10, acertosNominais: 10, acertosReais: 15, membros:['Maria Clara','João Antonio','Eleonora de Melo','Pedro Quiroz','José Eustáquio']},
 ]
+
+export const cursos = ['Sistemas de Informação', 'Ciências da computação', 'Analise e desenvolvimento de sistemas', 'Engenharia da computação'];
+
+export const unidades = ['Barreiro', 'Corel', 'Liberdade', 'Coração Eucarístico']
