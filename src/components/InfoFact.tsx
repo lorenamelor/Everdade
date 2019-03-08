@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { IRootState } from 'src/store';
 import { selectLoginType } from 'src/store/app/state';
 import styled from 'styled-components';
-import QuickList from '../components/QuickList'
+import { QuickList } from '../components/'
 
 interface IProps {
   item: any;
@@ -47,6 +47,7 @@ const mapStateToProps = (state: IRootState): IMapStateToProps => ({
   loginType: selectLoginType(state),
 });
 
+// STYLE
 const Details = styled.div`
     display:flex;
     flex-direction: column;

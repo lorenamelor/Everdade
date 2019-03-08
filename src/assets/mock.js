@@ -3,18 +3,6 @@ export const listItems = [
   {cod: 2,name: 'Turma de Sistemas de informação B'},
   {cod: 3,name: 'Turma de Sistemas de informação C'},
   {cod: 4,name: 'Turma de Sistemas de informação D'},
-  {cod: 1,name: 'Turma de Sistemas de informação A'},
-  {cod: 2,name: 'Turma de Sistemas de informação B'},
-  {cod: 3,name: 'Turma de Sistemas de informação C'},
-  {cod: 4,name: 'Turma de Sistemas de informação D'},
-  {cod: 1,name: 'Turma de Sistemas de informação A'},
-  {cod: 2,name: 'Turma de Sistemas de informação B'},
-  {cod: 3,name: 'Turma de Sistemas de informação C'},
-  {cod: 4,name: 'Turma de Sistemas de informação D'},
-  {cod: 1,name: 'Turma de Sistemas de informação A'},
-  {cod: 2,name: 'Turma de Sistemas de informação B'},
-  {cod: 3,name: 'Turma de Sistemas de informação C'},
-  {cod: 4,name: 'Turma de Sistemas de informação D'},
 ]
 
 export const listJF = [

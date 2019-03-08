@@ -24,6 +24,7 @@ class KeepJF extends React.Component<IProps> {
   }
 }
 
+// STYLE
 const Wrap = styled.div`
   >p {
     color: #636363;

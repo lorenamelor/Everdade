@@ -55,6 +55,15 @@ class InfoJS extends React.PureComponent<IProps & IMapStateToProps, IState> {
   }
 }
 
+interface IMapStateToProps {
+  loginType: 'professor' | 'aluno';
+};
+
+const mapStateToProps = (state: IRootState): IMapStateToProps => ({
+  loginType: selectLoginType(state),
+});
+
+// STYLE
 const Details = styled.div`
     display:flex;
     flex-direction: wrap;
@@ -77,14 +86,6 @@ const Details = styled.div`
       }
     }
 `
-
-interface IMapStateToProps {
-  loginType: 'professor' | 'aluno';
-};
-
-const mapStateToProps = (state: IRootState): IMapStateToProps => ({
-  loginType: selectLoginType(state),
-});
 
 
 export default connect(mapStateToProps)(InfoJS);

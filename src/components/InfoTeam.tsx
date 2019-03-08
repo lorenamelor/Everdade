@@ -5,8 +5,7 @@ import { IRootState } from 'src/store';
 import { selectLoginType } from 'src/store/app/state';
 import styled from 'styled-components';
 import { Button } from '../components';
-import QuickList from '../components/QuickList';
-
+import { QuickList } from '../components/'
 interface IProps {
   item: any;
 }
@@ -39,6 +38,15 @@ const InfoTeam: React.SFC<IProps & IMapStateToProps> = ({ item, loginType }) => 
   );
 }
 
+interface IMapStateToProps {
+  loginType: 'professor' | 'aluno';
+};
+
+const mapStateToProps = (state: IRootState): IMapStateToProps => ({
+  loginType: selectLoginType(state),
+});
+
+// STYLE
 const Details = styled.div`
     display:flex;
     width:100%;
@@ -98,14 +106,4 @@ const Details = styled.div`
       }
     }
 `
-
-interface IMapStateToProps {
-  loginType: 'professor' | 'aluno';
-};
-
-const mapStateToProps = (state: IRootState): IMapStateToProps => ({
-  loginType: selectLoginType(state),
-});
-
-
 export default connect(mapStateToProps)(InfoTeam);

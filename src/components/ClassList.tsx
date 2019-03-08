@@ -7,28 +7,25 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { map } from 'lodash';
 import { ActionsButtons } from '../components/';
 
-function SimpleList(props: any) {
+function ClassList(props: any) {
   const { listItems } = props;
 
   return (
     <div>
       <List component="nav">
-        {
-          map(listItems, (item) =>
+        {map(listItems, (item) =>
           <div>
             <ListItem button key={item.name}>
               <ListItemText primary={item.name} />
-              <ActionsButtons viewUrl='/turma'/>
+              <ActionsButtons viewUrl='/turma' />
             </ListItem>
             <Divider />
-            </div>
-          )
-        }
-      
+          </div>
+        )}
       </List>
     </div>
   );
 }
 
 
-export default SimpleList;
+export default ClassList;

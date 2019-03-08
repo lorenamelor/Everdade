@@ -47,6 +47,15 @@ class ViewJF extends React.PureComponent<IMapStateToProps> {
   }
 }
 
+interface IMapStateToProps {
+  loginType: 'professor' | 'aluno';
+};
+
+const mapStateToProps = (state: IRootState): IMapStateToProps => ({
+  loginType: selectLoginType(state),
+});
+
+// STYLE
 const ViewJFWrap = styled.div`
   >div:last-child{
     padding-left: 25px;
@@ -66,13 +75,5 @@ const ViewJFWrap = styled.div`
     padding:10px 20px;
   }
 `;
-
-interface IMapStateToProps {
-  loginType: 'professor' | 'aluno';
-};
-
-const mapStateToProps = (state: IRootState): IMapStateToProps => ({
-  loginType: selectLoginType(state),
-});
 
 export default connect(mapStateToProps)(ViewJF);

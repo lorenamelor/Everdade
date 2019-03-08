@@ -3,7 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import { map } from 'lodash';
 import * as React from 'react';
 import styled from 'styled-components';
-import { Button } from './';
+import { Button } from '../';
 
 interface IProps {
   text: string;
@@ -53,6 +53,7 @@ class QuickList extends React.Component<IProps, IState> {
   }
 }
 
+// STYLE
 const QuickListWrap = styled.div`
    &&{ position: relative;}
 

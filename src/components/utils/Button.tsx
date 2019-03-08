@@ -10,13 +10,12 @@ interface IProps{
 }
 
 const Button: React.SFC<IProps> = ({handleClick, delet, children}) => {
-
   return (
     <ButtonStyled delet={delet} onClick={handleClick}>{children}</ButtonStyled>
   );
-
 }
 
+// STYLE
 const ButtonStyled = styled(Btn) `
  &&{ 
    background-color: ${(props: any) => props.delet ? '#DB4437' : '#096F66' };
@@ -30,5 +29,4 @@ const ButtonStyled = styled(Btn) `
    }
  }
 `
-
 export default Button;

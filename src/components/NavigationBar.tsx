@@ -34,6 +34,7 @@ class NavigationBar extends React.PureComponent<IProps> {
 	}
 }
 
+// STYLE
 const MinNavigation = styled.div`
 	height: 60px;
 	width: 100%;

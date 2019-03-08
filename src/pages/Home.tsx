@@ -1,14 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { listItems } from '../assets/mock'
-import { Button, H1, KeepClass, Modal, NavigationBar, SimpleList } from '../components';
+import { Button, ClassList, H1, KeepClass, Modal, NavigationBar } from '../components';
 import { Start } from '../pages';
 
-
 // tslint:disable-next-line:no-empty-interface
-interface IProps {
-
-}
+interface IProps {}
 interface IState {
   open: boolean;
 }
@@ -43,7 +40,7 @@ class Home extends React.PureComponent<IProps,IState> {
 							<H1>Turmas</H1>
 							<Button handleClick={this.handleOpen}>CADASTRAR TURMA</Button>
 						</div>
-						<SimpleList listItems={listItems} />
+						<ClassList listItems={listItems} />
 						<Modal openModal={this.state.open} handleClose={this.handleClose} description={<KeepClass />} width='50%'/>
 					</div>
 				</div>
@@ -52,6 +49,7 @@ class Home extends React.PureComponent<IProps,IState> {
 	}
 }
 
+// STYLE
 const HomeWrap = styled.div`
 		display:flex;
 		height: 100%;

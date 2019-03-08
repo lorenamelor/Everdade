@@ -6,34 +6,17 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components';
 
 import { IRootState } from 'src/store';
-import { selectLoginType } from '../store/app/state';
+import { selectLoginType } from '../../store/app/state';
 
-
-const Button = styled(Btn) `
-  &&{
-    background-color: ${(props: any) => props.background};
-    width: 20px;
-    min-width: 26px;
-    height: 25px;
-    margin: 0 1px;
-
-    @media (max-width: 700px){
-      margin: 1px 1px;
-    }
-    :hover{
-      background-color: ${(props: any) => props.background};
-    }
-}
-`
 
 interface Iprops {
   viewUrl: string
 }
 
 const ActionsButtons: React.SFC<Iprops & IMapStateToProps> = ({ viewUrl, loginType }) => {
-  const viewIcon = require('../assets/icons/view-icon.png')
-  const editIcon = require('../assets/icons/edit-icon.png')
-  const deletIcon = require('../assets/icons/delet-icon.png')
+  const viewIcon = require('../../assets/icons/view-icon.png')
+  const editIcon = require('../../assets/icons/edit-icon.png')
+  const deletIcon = require('../../assets/icons/delet-icon.png')
 
   return (
     <span>
@@ -64,4 +47,22 @@ const mapStateToProps = (state: IRootState): IMapStateToProps => ({
   loginType: selectLoginType(state),
 });
 
+
+// STYLE
+const Button = styled(Btn) `
+  &&{
+    background-color: ${(props: any) => props.background};
+    width: 20px;
+    min-width: 26px;
+    height: 25px;
+    margin: 0 1px;
+
+    @media (max-width: 700px){
+      margin: 1px 1px;
+    }
+    :hover{
+      background-color: ${(props: any) => props.background};
+    }
+}
+`
 export default connect(mapStateToProps)(ActionsButtons);

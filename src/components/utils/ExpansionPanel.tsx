@@ -5,18 +5,15 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Tooltip from '@material-ui/core/Tooltip';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
 import { map } from 'lodash';
 import styled from 'styled-components';
-
-import { ActionsButtons, InfoFact, InfoJF, InfoTeam } from '../components/'
+import { ActionsButtons, InfoFact, InfoJF, InfoTeam } from '../'
 
 interface IProps {
   buttons?: boolean;
   items: any;
   type: string;
 }
-
 
 class ExpansionPanels extends React.Component<IProps> {
   public state = {
@@ -84,9 +81,9 @@ class ExpansionPanels extends React.Component<IProps> {
         return undefined;
     }
   }
-
 }
 
+// STYLE
 const ExpansionPanelWrap = styled(ExpansionPanel) `
   p {
     color: #636363;
@@ -108,5 +105,5 @@ const Highlighter = styled.div`
   align-self: center;
   margin-right: 10px;
 `
-
-export default ExpansionPanels;
+export default 
+ExpansionPanels;

@@ -117,6 +117,7 @@ class KeepJF extends React.Component<IProps> {
   }
 }
 
+// STYLE
 const Wrap = styled.div`
   >div:first-child{
       overflow-y: scroll;

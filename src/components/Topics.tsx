@@ -37,6 +37,7 @@ const Topics: React.SFC<Iprops> = ({ item }) => {
   );
 }
 
+// STYLE
 const TopicsWrap = styled(Card) `
    display: flex;
    color: #636363;

@@ -69,6 +69,15 @@ class ViewClass extends React.PureComponent<IProps & IMapStateToProps, IState> {
   }
 }
 
+interface IMapStateToProps {
+  loginType: 'professor' | 'aluno';
+};
+
+const mapStateToProps = (state: IRootState): IMapStateToProps => ({
+  loginType: selectLoginType(state),
+});
+
+// STYLE
 const ViewClassWrap = styled.div`
   > div:last-child{
     padding-left: 25px;
@@ -115,13 +124,4 @@ const Button = styled(Btn) `
    }
  }
 `
-
-interface IMapStateToProps {
-  loginType: 'professor' | 'aluno';
-};
-
-const mapStateToProps = (state: IRootState): IMapStateToProps => ({
-  loginType: selectLoginType(state),
-});
-
 export default connect(mapStateToProps)(ViewClass);

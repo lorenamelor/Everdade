@@ -1,6 +1,5 @@
-import * as React from 'react';
-// tslint:disable-next-line:ordered-imports
 import Modal from '@material-ui/core/Modal';
+import * as React from 'react';
 import styled from 'styled-components';
 
 interface IProps {
@@ -29,9 +28,10 @@ class SimpleModal extends React.Component<IProps> {
   }
 }
 
+// STYLE
 const ModalWrap = styled.div`
     max-width: 85%;
-    width: ${(props: any) => props.width}
+    width: ${(props: any) => props.width};
     max-height:85%;
     background-color: #FFF;
     border-radius: 5px;

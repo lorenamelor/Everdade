@@ -73,6 +73,7 @@ class KeepJF extends React.Component<IProps> {
   }
 }
 
+// STYLE
 const Wrap = styled.div`
   >Button{
     float: right;
@@ -91,7 +92,4 @@ const Wrap = styled.div`
   }  
 }
 `
-
-
-
 export default KeepJF;
