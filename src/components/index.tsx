@@ -7,6 +7,8 @@ import QuickList from './utils/QuickList'
 
 import AnswerFact from './AnswerFact';
 import ClassList from './ClassList';
+import FormLogin from './FormLogin'
+import FormSignUp from './FormSignUp'
 import InfoFact from './InfoFact';
 import InfoJF from './InfoJF';
 import InfoTeam from './InfoTeam';
@@ -20,6 +22,8 @@ export {
 	AnswerFact,
 	Button,
 	ExpansionPanel,
+	FormLogin,
+	FormSignUp,
 	H1,
 	InfoFact,
 	InfoTeam,

@@ -4,17 +4,17 @@ import { Route } from 'react-router-dom';
 
 // Pages
 
-import { Home, ViewClass, ViewJF } from './pages';
+import { Home, Login, SignUp, ViewClass, ViewJF } from './pages';
 
 class App extends React.Component {
   public render() {
     return (
       <div className="App">
-        <Route exact path='/' component={Home} />
-        <Route exact path='/home' component={Home} />
-
-        <Route exact path='/turma' component={ViewClass} />
-        <Route exact path='/jf' component={ViewJF} />
+        <Route exact path='/' component={Login} />
+        <Route exact path='/signup' component={SignUp} />
+        <Route path='/home' component={Home} />
+        <Route path='/turma' component={ViewClass} />
+        <Route path='/jf' component={ViewJF} />
       </div>
     );
   }

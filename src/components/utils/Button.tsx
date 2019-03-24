@@ -7,11 +7,13 @@ interface IProps{
   handleClick?: any;
   children: string;
   delet?: boolean;
+  type?: string,
+  width?: string,
 }
 
-const Button: React.SFC<IProps> = ({handleClick, delet, children}) => {
+const Button: React.SFC<IProps> = ({handleClick, delet, children, width, type}) => {
   return (
-    <ButtonStyled delet={delet} onClick={handleClick}>{children}</ButtonStyled>
+    <ButtonStyled delet={delet} onClick={handleClick} type={type}  width={width}>{children}</ButtonStyled>
   );
 }
 
@@ -19,6 +21,7 @@ const Button: React.SFC<IProps> = ({handleClick, delet, children}) => {
 const ButtonStyled = styled(Btn) `
  &&{ 
    background-color: ${(props: any) => props.delet ? '#DB4437' : '#096F66' };
+   width: ${(props: any) => props.width ? props.width : 'auto' };
    color: #FFF;
    min-height: 30px;
    align-items: center;
