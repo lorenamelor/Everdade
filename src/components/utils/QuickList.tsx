@@ -38,7 +38,7 @@ class QuickList extends React.Component<IProps, IState> {
       <QuickListWrap>
         <ClickAwayListener onClickAway={this.handleClickAway}>
           <div>
-            <Button handleClick={this.handleClick}>{text}</Button>
+            <Button handleClick={this.handleClick} width="100%">{text}</Button>
             {open ? (
               <Paper className='paper'>
                 {map(list, (item) =>
@@ -56,7 +56,6 @@ class QuickList extends React.Component<IProps, IState> {
 // STYLE
 const QuickListWrap = styled.div`
    &&{ position: relative;}
-
   .paper{
     display: flex;
     height: auto;

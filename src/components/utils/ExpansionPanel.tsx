@@ -6,6 +6,9 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Tooltip from '@material-ui/core/Tooltip';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { map } from 'lodash';
+import { connect } from 'react-redux';
+import { IRootState } from 'src/store';
+import { selectLoginType } from 'src/store/app/state';
 import styled from 'styled-components';
 import { ActionsButtons, InfoFact, InfoJF, InfoTeam } from '../'
 
@@ -15,35 +18,44 @@ interface IProps {
   type: string;
 }
 
-class ExpansionPanels extends React.Component<IProps> {
+class ExpansionPanels extends React.Component<IProps & IMapStateToProps> {
   public state = {
     expanded: 1,
   };
 
   public render() {
     const { expanded } = this.state;
-    const { buttons, type, items } = this.props;
+    const { buttons, type, items, loginType } = this.props;
 
     return (
       <div>
-        {map(items, (item: any) =>
-          <ExpansionPanelWrap key={item.cod} expanded={expanded === item.cod} onChange={this.handleChange(item.cod)}>
-            <ExpansionPanelSummary className='summary' expandIcon={<ExpandMoreIcon />}>
-              <p>
-                {type === 'jf'
-                  ? <Tooltip title={item.status} placement="bottom">
-                    <Highlighter color={this.handleColorHighlight(item.status!)} />
-                  </Tooltip>
-                  : null}
-                {item.name}
-              </p>
-              {buttons ? <ActionsButtons viewUrl='/jf' /> : null}
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              {this.handleInfo(type, item)}
-            </ExpansionPanelDetails>
-          </ExpansionPanelWrap>
-        )}
+        
+        {map(items, (item: any) => {
+          if (type === 'jf' && loginType === 'aluno' && item.status === 'Em criação') {
+            return null
+          }
+          else {
+            
+            return (
+              <ExpansionPanelWrap key={item.cod} expanded={expanded === item.cod} onChange={this.handleChange(item.cod)}>
+                <ExpansionPanelSummary className='summary' expandIcon={<ExpandMoreIcon />}>
+                  <p>
+                    {type === 'jf'
+                      ? <Tooltip title={item.status} placement="bottom">
+                        <Highlighter color={this.handleColorHighlight(item.status!)} />
+                      </Tooltip>
+                      : null}
+                    {item.name}
+                  </p>
+                  {buttons ? <ActionsButtons viewUrl='/jf' /> : null}
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                  {this.handleInfo(type, item)}
+                </ExpansionPanelDetails>
+              </ExpansionPanelWrap>
+            )
+          }
+        })}
       </div>
     );
   }
@@ -84,7 +96,7 @@ class ExpansionPanels extends React.Component<IProps> {
 }
 
 // STYLE
-const ExpansionPanelWrap = styled(ExpansionPanel) `
+const ExpansionPanelWrap = styled(ExpansionPanel)`
   p {
     color: #636363;
     margin: 5px;
@@ -105,5 +117,14 @@ const Highlighter = styled.div`
   align-self: center;
   margin-right: 10px;
 `
-export default 
-ExpansionPanels;
+
+
+interface IMapStateToProps {
+  loginType: 'professor' | 'aluno';
+};
+
+const mapStateToProps = (state: IRootState): IMapStateToProps => ({
+  loginType: selectLoginType(state),
+});
+
+export default connect(mapStateToProps)(ExpansionPanels);

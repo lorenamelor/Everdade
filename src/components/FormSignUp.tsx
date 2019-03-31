@@ -8,10 +8,10 @@ import styled from 'styled-components';
 import * as Yup from 'yup';
 
 import { FormControlLabel, InputAdornment, MenuItem, Radio, RadioGroup, TextField } from '@material-ui/core';
-import { IUserSignUp, requestCourses, selectCouses, selectSignUpSuccess, signUp } from 'src/store/app/state';
+import { IUserSignUp, requestCourses, selectCourses, selectSignUpSuccess, signUp } from 'src/store/app/state';
 import { Button } from '../components';
 
-import { cursos } from '../assets/mock'
+// import { cursos } from '../assets/mock'
 
 // validate form
 const SignupSchema = Yup.object().shape({
@@ -40,9 +40,12 @@ const SignupSchema = Yup.object().shape({
 });
 
 class FormSignUp extends React.Component<IMapStateToProps & IMapDispatchToProps> {
+  public componentDidMount() {
+		this.props.requestCourses();
+  }
+  
   public render() {
-    const { signUpSuccess } = this.props;
-
+    const { signUpSuccess, courses } = this.props;
     if(signUpSuccess) { return <Redirect to="/" /> }
     return (
       <Wrap>
@@ -138,9 +141,11 @@ class FormSignUp extends React.Component<IMapStateToProps & IMapDispatchToProps>
                         </InputAdornment>,
                     }}
                   >
-                    {cursos.map(option => (
-                      <MenuItem key={option} value={option}>
-                        {option}
+                  {!(courses.length > 0) 
+                  ? <MenuItem>Selecione um curso</MenuItem>
+                  : courses.map((option:{id_curso: string, nome: string}) => (
+                      <MenuItem key={option.id_curso} value={option.nome}>
+                        {option.nome}
                       </MenuItem>
                     ))}
                   </TextField>
@@ -288,7 +293,7 @@ interface IMapStateToProps {
 };
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({
-  courses: selectCouses(state),
+  courses: selectCourses(state),
   signUpSuccess: selectSignUpSuccess(state),
 });
 

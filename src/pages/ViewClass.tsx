@@ -79,6 +79,7 @@ const mapStateToProps = (state: IRootState): IMapStateToProps => ({
 
 // STYLE
 const ViewClassWrap = styled.div`
+  margin-bottom: 30px;
   > div:last-child{
     padding-left: 25px;
     padding-right: 25px;

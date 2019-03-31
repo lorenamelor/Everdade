@@ -7,11 +7,21 @@ import { IRootState } from 'src/store';
 import { selectLoginType } from 'src/store/app/state';
 import styled from 'styled-components';
 import { listFacts, listJF, listTeam } from '../assets/mock'
-import { ExpansionPanel, H1, InfoJF, NavigationBar, Topics } from '../components';
+import { Button, CreateTeam, ExpansionPanel, H1, InfoJF, Modal, NavigationBar, Topics } from '../components';
 import { Start } from '../pages';
 
 class ViewJF extends React.PureComponent<IMapStateToProps> {
+  public state = {
+    open: false,
+  };
 
+  public handleOpen = () => {
+    this.setState({ open: true });
+  };
+
+  public handleClose = () => {
+    this.setState({ open: false });
+  };
   public render() {
 
     const { loginType } = this.props;
@@ -24,17 +34,24 @@ class ViewJF extends React.PureComponent<IMapStateToProps> {
           <Card className='card'><InfoJF item={listJF[0]} /></Card>
           <div className='body'>
             <div>
-              <H1>{loginType === 'professor' ? 'Equipes' : 'Equipe'}</H1>
-              <ExpansionPanel type='team' items={loginType === 'professor' ? listTeam : [listTeam[0]]} />
-
-              {loginType !== 'professor' ?
+              {loginType === 'professor' ?
                 <>
-                <H1>Topicos</H1>
-                <Topics />
+                  <div id='header'>
+                    <H1>Equipes</H1>
+                  </div>
+                  <ExpansionPanel type='team' items={listTeam} />
                 </>
-                : null
+                :
+                <>
+                  <div id='header'>
+                    <H1>Equipe</H1>
+                    <Button handleClick={this.handleOpen}>CRIAR EQUIPE</Button>
+                  </div>
+                  <Card id='cardTeam'>Você não possui uma equipe</Card>
+                  <H1>Topicos</H1>
+                  <Topics />
+                </>
               }
-
             </div>
             <div>
               <H1>Fatos</H1>
@@ -42,6 +59,7 @@ class ViewJF extends React.PureComponent<IMapStateToProps> {
             </div>
           </div>
         </div>
+        <Modal openModal={this.state.open} handleClose={this.handleClose} description={<CreateTeam />} width='50%' />
       </ViewJFWrap >
     );
   }
@@ -71,8 +89,19 @@ const ViewJFWrap = styled.div`
       }
     }
   }
+  #header{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+  }
   .card{
     padding:10px 20px;
+  }
+  #cardTeam{
+    display: flex;
+    justify-content: center;
+    color: #636363;
+    padding:30px;
   }
 `;
 

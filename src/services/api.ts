@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export async function apiRequestCourses(): Promise<any> {
 	const courses: any = await axios.get(`http://localhost/everdade/index.php/cursos`);
-	return courses;
+	return courses.data;
 }
 
 export async function apiSignUp(payload: any): Promise<{ data: { msg: any } }>  {

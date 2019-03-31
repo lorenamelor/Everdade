@@ -1,8 +1,4 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
-import { IRootState } from 'src/store';
-import { requestCourses, selectCouses } from 'src/store/app/state';
 import styled from 'styled-components';
 import { FormSignUp } from '../components';
 
@@ -12,14 +8,10 @@ interface IState {
 	open: boolean;
 }
 
-class SignUp extends React.PureComponent<IProps & IMapDispatchToProps & IMapStateToProps, IState> {
+class SignUp extends React.PureComponent<IProps, IState> {
 	public state = {
 		open: false,
 	};
-
-	public componentDidMount() {
-		this.props.requestCourses();
-	}
 
 	public handleOpen = () => {
 		this.setState({ open: true });
@@ -112,22 +104,5 @@ const SignUpWrap = styled.div`
   }
 `
 
-interface IMapDispatchToProps {
-  requestCourses: () => void;
-}
-
-const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
-  requestCourses: () => dispatch(requestCourses.started())
-})
-
-
-interface IMapStateToProps {
-  courses: [];
-};
-
-const mapStateToProps = (state: IRootState): IMapStateToProps => ({
-  courses: selectCouses(state),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
+export default SignUp;
 

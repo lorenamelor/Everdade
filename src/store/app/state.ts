@@ -8,7 +8,7 @@ import { apiRequestCourses, apiSignIn, apiSignUp } from '../../services/api';
 
 // SELECTORS
 export const selectLoginType: Selector<'professor' | 'aluno'> = ({ appState }) => appState.login;
-export const selectCouses: Selector<[]> = ({ appState }) => appState.couses;
+export const selectCourses: Selector<[]> = ({ appState }) => appState.courses;
 export const selectSignUpSuccess: Selector<boolean> = ({ appState }) => appState.signUpSuccess;
 export const selectSignInSuccess: Selector<boolean> = ({ appState }) => appState.signInSuccess;
 
@@ -29,7 +29,7 @@ export const signIn = actionCreator.async<{login: string, senha: string}, any, a
 export interface IState {
 	initialized: boolean;
 	login: 'professor' | 'aluno';
-	couses: [];
+	courses: [];
 	isSignUp: boolean;
 	signUpSuccess: boolean;
 	isSignIn: boolean;
@@ -39,7 +39,7 @@ export interface IState {
 const INITIAL_STATE: IState = {
 	initialized: false,
 	login: 'professor',
-	couses: [],
+	courses: [],
 	isSignUp: false,
 	signUpSuccess: false,
 	isSignIn: false,
@@ -84,7 +84,7 @@ export default reducerWithInitialState(INITIAL_STATE)
 const requestCoursesEpic: Epic = (action$) => action$.pipe(
 	filter(requestCourses.started.match),
 	mergeMap(() => from(apiRequestCourses()).pipe(
-		map((courses) => {console.log('courses', courses); return (requestCourses.done({ result: courses }))},
+		map((courses) => (requestCourses.done({ result: courses })),
 		catchError((error) => of(requestCourses.failed({ error }))),
 	)),
 ));
