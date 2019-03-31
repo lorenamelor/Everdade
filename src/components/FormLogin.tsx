@@ -1,40 +1,42 @@
+import { Form, Formik, } from 'formik';
 import * as React from 'react';
+import { connect } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom'
+import { Dispatch } from 'redux';
+import { IRootState } from 'src/store';
 import styled from 'styled-components';
+
+import { InputAdornment, TextField } from '@material-ui/core';
+import { selectSignInSuccess, signIn } from 'src/store/app/state';
 import { Button } from '../components'
 
-import {InputAdornment, TextField} from '@material-ui/core';
-import { Form, Formik, } from 'formik';
-import { Link } from 'react-router-dom'
-
-// tslint:disable-next-line:no-empty-interface
-interface IProps { }
-
-class FormLogin extends React.Component<IProps> {
+class FormLogin extends React.Component<IMapDispatchToProps & IMapStateToProps>{
   public render() {
+    const { signInSuccess } = this.props;
+
+    if (signInSuccess) { return <Redirect to="/turma" /> }
     return (
       <Wrap>
         <Formik
           initialValues={{
             login: '',
-            password: '',
+            senha: '',
           }}
           // tslint:disable-next-line:jsx-no-lambda
           onSubmit={values => {
-            // same shape as initial values
             console.log(values);
+            this.props.signIn(values)
           }}
         >
-          {({ values: {password, login}, handleChange, isValid, setFieldTouched }) => {
-
+          {({ values: { senha, login }, handleChange, isValid, setFieldTouched }) => {
             const change = (nameInput: any, e: any) => {
               e.persist();
               handleChange(e);
               setFieldTouched(nameInput, true, false);
             };
-
             return (
-              <Form>            
-               <TextField
+              <Form>
+                <TextField
                   id="standard-name"
                   className='input'
                   name='login'
@@ -52,21 +54,21 @@ class FormLogin extends React.Component<IProps> {
                     maxLength: 10,
                   }}
                 />
-                  <TextField
-                    className='input'
-                    name='password'
-                    label="Password"
-                    margin="normal"
-                    type="password"
-                    value={password}
-                    onChange={change.bind(null, "password")}
-                    InputProps={{
-                      startAdornment:
-                        <InputAdornment position="start">
-                          <img src={require('../assets/icons/password.png')} />
-                        </InputAdornment>,
-                    }}
-                  />               
+                <TextField
+                  className='input'
+                  name='senha'
+                  label="Password"
+                  margin="normal"
+                  type="password"
+                  value={senha}
+                  onChange={change.bind(null, "senha")}
+                  InputProps={{
+                    startAdornment:
+                      <InputAdornment position="start">
+                        <img src={require('../assets/icons/password.png')} />
+                      </InputAdornment>,
+                  }}
+                />
                 <Button type="submit" width="60%">Entrar</Button>
                 <p>Não possui uma conta? <Link to="/signup" id="link">Cadastrar</Link></p>
               </Form>
@@ -82,12 +84,11 @@ class FormLogin extends React.Component<IProps> {
 
 // STYLE
 const Wrap = styled.div`
-  width: 50%;
+  width: 70%;
   display:flex;
   align-items: center;
   text-align: center;
   align-self: center;
-  
   .input{
     margin-bottom: 10px;
     margin-top:0;
@@ -103,14 +104,31 @@ const Wrap = styled.div`
     :hover{
     text-decoration: underline;
     }
-  }
-    
-
-    @media (max-width: 1000px){
-			#logo{
-				display: none;
-			}
+  } 
+  @media (max-width: 1000px){
+    #logo{
+      display: none;
     }
+  }
 `
 
-export default FormLogin;
+// REDUX ACTIONS
+interface IMapDispatchToProps {
+  signIn: (payload: { login: string, senha: string }) => void;
+}
+
+const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
+  signIn: (payload) => dispatch(signIn.started(payload))
+})
+
+// REDUX STATE
+interface IMapStateToProps {
+  signInSuccess: boolean;
+};
+
+const mapStateToProps = (state: IRootState): IMapStateToProps => ({
+  signInSuccess: selectSignInSuccess(state),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(FormLogin);
+

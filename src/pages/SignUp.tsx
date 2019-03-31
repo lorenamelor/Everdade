@@ -1,4 +1,8 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import { IRootState } from 'src/store';
+import { requestCourses, selectCouses } from 'src/store/app/state';
 import styled from 'styled-components';
 import { FormSignUp } from '../components';
 
@@ -8,10 +12,14 @@ interface IState {
 	open: boolean;
 }
 
-class SignUp extends React.PureComponent<IProps, IState> {
+class SignUp extends React.PureComponent<IProps & IMapDispatchToProps & IMapStateToProps, IState> {
 	public state = {
 		open: false,
 	};
+
+	public componentDidMount() {
+		this.props.requestCourses();
+	}
 
 	public handleOpen = () => {
 		this.setState({ open: true });
@@ -21,8 +29,8 @@ class SignUp extends React.PureComponent<IProps, IState> {
 		this.setState({ open: false });
 	};
 	public render() {
-		const brainBackground = require("../assets/img/brain-background.jpg");
-		const logo = require("../assets/img/logo.png")
+		const brainBackground = require("../assets/img/brain-extends.jpg");
+		const logo = require("../assets/img/logo-horizontal.png");
 
 		return (
 			<SignUpWrap brainBackground={brainBackground}>
@@ -52,11 +60,11 @@ const SignUpWrap = styled.div`
 			align-items: center;
     	justify-content: center;
 			position: fixed;
-			width:490px;
+			width:50%;
 		> #brain {
 			height: 100vh;
 			position: relative;
-			width:490px;
+			width: 100%;
 		}
 	}
 	> div:last-child {
@@ -66,10 +74,9 @@ const SignUpWrap = styled.div`
 			justify-content: center;
 			height: 100vh;
 			width:100%;
-			margin-left: 490px;
+			margin-left: 51%;
 			> #logo {
-			height: 130px;
-			width: 130px;
+			height: 80px;
 			align-self: center;
   	  margin-bottom: 10px;
 			margin-top: 10px;
@@ -86,7 +93,7 @@ const SignUpWrap = styled.div`
 			}
     }
 
-	@media (max-height: 650px){
+	@media (max-height: 550px){
 		#logo{
 			display: none;
 		}
@@ -105,4 +112,22 @@ const SignUpWrap = styled.div`
   }
 `
 
-export default SignUp;
+interface IMapDispatchToProps {
+  requestCourses: () => void;
+}
+
+const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
+  requestCourses: () => dispatch(requestCourses.started())
+})
+
+
+interface IMapStateToProps {
+  courses: [];
+};
+
+const mapStateToProps = (state: IRootState): IMapStateToProps => ({
+  courses: selectCouses(state),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
+

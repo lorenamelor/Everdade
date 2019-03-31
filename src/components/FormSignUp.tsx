@@ -1,27 +1,26 @@
-import * as React from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import { cursos } from '../assets/mock'
-import { Button } from '../components';
-
-import {
-  FormControlLabel,
-  InputAdornment,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  TextField
-} from '@material-ui/core';
 import { Form, Formik, } from 'formik';
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom';
+import { Dispatch } from 'redux';
+import { IRootState } from 'src/store';
+import styled from 'styled-components';
 import * as Yup from 'yup';
 
+import { FormControlLabel, InputAdornment, MenuItem, Radio, RadioGroup, TextField } from '@material-ui/core';
+import { IUserSignUp, requestCourses, selectCouses, selectSignUpSuccess, signUp } from 'src/store/app/state';
+import { Button } from '../components';
+
+import { cursos } from '../assets/mock'
+
+// validate form
 const SignupSchema = Yup.object().shape({
-  type: Yup.string()
-  .required("Tipo é obrigatório"),
-  name: Yup.string()
+  tipo: Yup.string()
+    .required("Tipo é obrigatório"),
+  nome: Yup.string()
     .required("Nome é obrigatório"),
-  course: Yup.string().when('type', {
-    is:(val) => val === 'aluno',
+  curso: Yup.string().when('tipo', {
+    is: (val) => val === 'aluno',
     then: Yup.string().required("Curso é obrigatório"),
     otherwise: Yup.string().notRequired(),
   }),
@@ -31,43 +30,38 @@ const SignupSchema = Yup.object().shape({
   email: Yup.string()
     .email("Email inválido")
     .required("Email é obrigatório"),
-  password: Yup.string()
+  senha: Yup.string()
     .required("Senha é obrigatório")
     .matches(/[a-zA-Z]/, 'Deve conter letras')
-    .matches(/[0-9]/,'Deve conter números'),
-  confirmPassword: Yup.string()
+    .matches(/[0-9]/, 'Deve conter números'),
+  confirmarSenha: Yup.string()
     .required("Confirmar senha é obrigatório")
-    .oneOf([Yup.ref("password")], "As senhas não conferem")
+    .oneOf([Yup.ref("senha")], "As senhas não conferem")
 });
 
-// tslint:disable-next-line:no-empty-interface
-interface IProps { }
-
-class FormSignUp extends React.Component<IProps> {
+class FormSignUp extends React.Component<IMapStateToProps & IMapDispatchToProps> {
   public render() {
+    const { signUpSuccess } = this.props;
+
+    if(signUpSuccess) { return <Redirect to="/" /> }
     return (
       <Wrap>
         <Formik
           initialValues={{
-            type: 'aluno',
-            name: '',
+            tipo: 'aluno',
+            nome: '',
             email: '',
-            course: '',
+            curso: '',
             login: '',
-            password: '',
-            confirmPassword: '',
+            senha: '',
+            confirmarSenha: '',
           }}
           validationSchema={SignupSchema}
           // tslint:disable-next-line:jsx-no-lambda
-          onSubmit={values => {
-            // same shape as initial values
-            console.log(values);
-          }}
+          onSubmit={values => this.props.signUp(values)}
         >
-          {({ errors, touched, values: { type, name, course, email, password, login, confirmPassword }, handleChange,
-            isValid,
-            setFieldTouched }) => {
-
+          {({ errors, touched, values: { tipo, nome, curso, email, senha, login, confirmarSenha }, 
+           handleChange, isValid,  setFieldTouched }) => {
             const change = (nameInput: any, e: any) => {
               e.persist();
               handleChange(e);
@@ -78,9 +72,9 @@ class FormSignUp extends React.Component<IProps> {
               <Form>
                 <RadioGroup
                   aria-label="position"
-                  name="type"
-                  value={type}
-                  onChange={change.bind(null, "type")}
+                  name="tipo"
+                  value={tipo}
+                  onChange={change.bind(null, "tipo")}
                   row
                 >
                   <RadioButtom
@@ -97,15 +91,13 @@ class FormSignUp extends React.Component<IProps> {
                   />
                 </RadioGroup>
                 <TextField
-                  id="standard-name"
                   className='input'
-                  name='name'
-                  label="Name"
-                  margin="normal"
-                  value={name}
-                  helperText={touched.name ? errors.name : ""}
-                  error={touched.name && Boolean(errors.name)}
-                  onChange={change.bind(null, "name")}
+                  name='nome'
+                  label="Nome"
+                  value={nome}
+                  helperText={touched.nome ? errors.nome : ""}
+                  error={touched.nome && Boolean(errors.nome)}
+                  onChange={change.bind(null, "nome")}
                   InputProps={{
                     startAdornment:
                       <InputAdornment position="start">
@@ -114,11 +106,9 @@ class FormSignUp extends React.Component<IProps> {
                   }}
                 />
                 <TextField
-                  id="standard-name"
                   className='input'
                   name='email'
                   label="Email"
-                  margin="normal"
                   value={email}
                   helperText={touched.email ? errors.email : ""}
                   error={touched.email && Boolean(errors.email)}
@@ -130,18 +120,17 @@ class FormSignUp extends React.Component<IProps> {
                       </InputAdornment>,
                   }}
                 />
-                {type === 'aluno' ?
+                {tipo === 'aluno' ?
                   < TextField
                     id="standard-select-currency"
                     className='input'
-                    name='course'
+                    name='curso'
                     select
                     label="Curso"
-                    value={course}
-                    margin="normal"
-                    helperText={touched.course ? errors.course : ""}
-                    error={touched.course && Boolean(errors.course)}
-                    onChange={change.bind(null, "course")}
+                    value={curso}
+                      helperText={touched.curso ? errors.curso : ""}
+                    error={touched.curso && Boolean(errors.curso)}
+                    onChange={change.bind(null, "curso")}
                     InputProps={{
                       startAdornment:
                         <InputAdornment position="start">
@@ -158,11 +147,9 @@ class FormSignUp extends React.Component<IProps> {
                   : null
                 }
                 <TextField
-                  id="standard-name"
                   className='input'
                   name='login'
                   label="Login"
-                  margin="normal"
                   value={login}
                   onChange={change.bind(null, "login")}
                   helperText={touched.login ? errors.login : ""}
@@ -177,17 +164,16 @@ class FormSignUp extends React.Component<IProps> {
                     maxLength: 10,
                   }}
                 />
-                <div id="passwords">
+                <div id="senhas">
                   <TextField
-                    className='password'
-                    name='password'
-                    label="Password"
-                    margin="normal"
+                    className='senha'
+                    name='senha'
+                    label="Senha"
                     type="password"
-                    value={password}
-                    onChange={change.bind(null, "password")}
-                    helperText={touched.password ? errors.password : ""}
-                    error={touched.password && Boolean(errors.password)}
+                    value={senha}
+                    onChange={change.bind(null, "senha")}
+                    helperText={touched.senha ? errors.senha : ""}
+                    error={touched.senha && Boolean(errors.senha)}
                     InputProps={{
                       startAdornment:
                         <InputAdornment position="start">
@@ -196,21 +182,20 @@ class FormSignUp extends React.Component<IProps> {
                     }}
                   />
                   <TextField
-                    className='password'
-                    name='confirmPassword'
+                    className='senha'
+                    name='confirmarSenha'
                     label="Confirmar senhar"
                     type="password"
-                    margin="normal"
-                    value={confirmPassword}
-                    onChange={change.bind(null, "confirmPassword")}
-                    helperText={touched.confirmPassword ? errors.confirmPassword : ""}
-                    error={touched.confirmPassword && Boolean(errors.confirmPassword)}
+                      value={confirmarSenha}
+                    onChange={change.bind(null, "confirmarSenha")}
+                    helperText={touched.confirmarSenha ? errors.confirmarSenha : ""}
+                    error={touched.confirmarSenha && Boolean(errors.confirmarSenha)}
                     InputProps={{
                       startAdornment:
                         <InputAdornment position="start">
                           <img src={require('../assets/icons/password.png')} />
                         </InputAdornment>,
-                       
+
                     }}
                   />
                 </div>
@@ -223,13 +208,11 @@ class FormSignUp extends React.Component<IProps> {
       </Wrap >
     );
   }
-
-
 }
 
 // STYLE
 const Wrap = styled.div`
-  width: 50%;
+  width: 70%;
   display:flex;
   align-items: center;
   text-align: center;
@@ -246,42 +229,39 @@ const Wrap = styled.div`
   #link{
     color: #249A90;
     text-decoration: none;
-
     :hover{
     text-decoration: underline;
     }
   }
   #study{
       width: 22px;
-    }
-    #teacher{
-      width: 26px;
-    }
-    .password{
-      width: 48%;
-      margin-top: 0px;
-      margin-bottom: 10px;
-    }
-    #passwords{
-      display: flex;
-      justify-content: space-between;
-    }
-    
+  }
+  #teacher{
+    width: 26px;
+  }
+  .senha{
+    width: 48%;
+    margin-top: 0px;
+    margin-bottom: 10px;
+  }
+  #senhas{
+    display: flex;
+    justify-content: space-between;
+  }
 
-    @media (max-width: 1000px){
-			#logo{
-				display: none;
-			}
-
-      .password{
+  @media (max-width: 1000px){
+    #logo{
+      display: none;
+    }
+    .senha{
       width: 100%;
       margin-top: 0px;
       margin-bottom: 10px;
-      }
-      #passwords{
-          display: unset;
     }
-		}
+    #senhas{
+      display: unset;
+    }
+  }
 `
 
 const RadioButtom = styled(FormControlLabel)`
@@ -290,5 +270,28 @@ const RadioButtom = styled(FormControlLabel)`
   } 
 `
 
+// REDUX ACTIONS
+interface IMapDispatchToProps {
+  requestCourses: () => void;
+  signUp: (payload: IUserSignUp) => void;
+}
 
-export default FormSignUp;
+const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
+  requestCourses: () => dispatch(requestCourses.started()),
+  signUp: (payload) => dispatch(signUp.started(payload))
+})
+
+// REDUX STATE
+interface IMapStateToProps {
+  courses: [];
+  signUpSuccess: boolean;
+};
+
+const mapStateToProps = (state: IRootState): IMapStateToProps => ({
+  courses: selectCouses(state),
+  signUpSuccess: selectSignUpSuccess(state),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(FormSignUp);
+
+

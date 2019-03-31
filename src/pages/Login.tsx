@@ -21,7 +21,7 @@ class Login extends React.PureComponent<IProps, IState> {
 		this.setState({ open: false });
 	};
 	public render() {
-		const brainBackground = require("../assets/img/brain-background.jpg");
+		const brainBackground = require("../assets/img/brain-extends.jpg");
 		const logo = require("../assets/img/logo.png")
 
 		return (
@@ -52,11 +52,11 @@ const LoginWrap = styled.div`
 			align-items: center;
     	justify-content: center;
 			position: fixed;
-			width:490px;
+			width:50%;
 		> #brain {
 			height: 100vh;
 			position: relative;
-			width:490px;
+			width:100%;
 		}
 	}
 	> div:last-child {
@@ -66,7 +66,7 @@ const LoginWrap = styled.div`
 			justify-content: center;
 			height: 100vh;
 			width:100%;
-			margin-left: 490px;
+			margin-left: 50%;
 			> #logo {
 			height: 130px;
 			width: 130px;
@@ -86,7 +86,7 @@ const LoginWrap = styled.div`
 			}
     }
 
-	@media (max-height: 650px){
+	@media (max-height: 350px){
 		#logo{
 			display: none;
 		}
