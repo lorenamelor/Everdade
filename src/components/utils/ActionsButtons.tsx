@@ -10,10 +10,11 @@ import { selectLoginType } from '../../store/app/state';
 
 
 interface Iprops {
-  viewUrl: string
+  viewUrl: string;
+  onClickEdit?: () => void;
 }
 
-const ActionsButtons: React.SFC<Iprops & IMapStateToProps> = ({ viewUrl, loginType }) => {
+const ActionsButtons: React.SFC<Iprops & IMapStateToProps> = ({ viewUrl, loginType, onClickEdit }) => {
   const viewIcon = require('../../assets/icons/view-icon.png')
   const editIcon = require('../../assets/icons/edit-icon.png')
   const deletIcon = require('../../assets/icons/delet-icon.png')
@@ -27,7 +28,7 @@ const ActionsButtons: React.SFC<Iprops & IMapStateToProps> = ({ viewUrl, loginTy
       </Link>
       {loginType === 'professor' ?
         <>
-        <Button background={'#00BBD3'}>
+        <Button background={'#00BBD3'} onClick={onClickEdit}>
           <img src={editIcon} />
         </Button>
         <Button background={'#DB4437'}>

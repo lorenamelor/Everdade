@@ -17,7 +17,7 @@ class KeepJF extends React.Component<IProps> {
     return (
       <Wrap>
         <div>
-          <H1>Cadastrar Julgamento de Fatos</H1>
+          <H1>Julgamento de Fatos</H1>
           <KeepJFWrap>
             <TextField
               id="standard-name"

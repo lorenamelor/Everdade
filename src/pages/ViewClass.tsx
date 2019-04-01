@@ -61,7 +61,7 @@ class ViewClass extends React.PureComponent<IProps & IMapStateToProps, IState> {
             <span><H1>Julgamento de Fatos</H1></span>
             {loginType === 'professor' ? <Button onClick={this.handleOpen}>Cadastrar JF</Button> : null}
           </div>
-          <ExpansionPanel items={listJF} buttons type='jf'/>
+          <ExpansionPanel items={listJF} buttons type='jf' onClickEdit={this.handleOpen}/>
         </div>
         <Modal openModal={this.state.open} handleClose={this.handleClose} description={<KeepJF />} width='85%'/>
       </ViewClassWrap>

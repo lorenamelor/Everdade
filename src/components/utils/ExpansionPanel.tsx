@@ -16,6 +16,7 @@ interface IProps {
   buttons?: boolean;
   items: any;
   type: string;
+  onClickEdit?: () => void;
 }
 
 class ExpansionPanels extends React.Component<IProps & IMapStateToProps> {
@@ -25,7 +26,7 @@ class ExpansionPanels extends React.Component<IProps & IMapStateToProps> {
 
   public render() {
     const { expanded } = this.state;
-    const { buttons, type, items, loginType } = this.props;
+    const { buttons, type, items, loginType, onClickEdit } = this.props;
 
     return (
       <div>
@@ -47,7 +48,7 @@ class ExpansionPanels extends React.Component<IProps & IMapStateToProps> {
                       : null}
                     {item.name}
                   </p>
-                  {buttons ? <ActionsButtons viewUrl='/jf' /> : null}
+                  {buttons ? <ActionsButtons viewUrl='/jf' onClickEdit={onClickEdit} /> : null}
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                   {this.handleInfo(type, item)}
