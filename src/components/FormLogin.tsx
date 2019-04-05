@@ -14,7 +14,7 @@ class FormLogin extends React.Component<IMapDispatchToProps & IMapStateToProps>{
   public render() {
     const { signInSuccess } = this.props;
 
-    if (signInSuccess) { return <Redirect to="/turma" /> }
+    if (signInSuccess &&  sessionStorage.getItem('userData')) { return <Redirect to="/home" /> }
     return (
       <Wrap>
         <Formik
@@ -22,7 +22,6 @@ class FormLogin extends React.Component<IMapDispatchToProps & IMapStateToProps>{
             login: '',
             senha: '',
           }}
-          // tslint:disable-next-line:jsx-no-lambda
           onSubmit={values => {
             console.log(values);
             this.props.signIn(values)
@@ -37,7 +36,6 @@ class FormLogin extends React.Component<IMapDispatchToProps & IMapStateToProps>{
             return (
               <Form>
                 <TextField
-                  id="standard-name"
                   className='input'
                   name='login'
                   label="Login"

@@ -1,4 +1,8 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
+import { IRootState } from 'src/store';
+import { selectSignInSuccess } from 'src/store/app/state';
 import styled from 'styled-components';
 import { listItems } from '../assets/mock'
 import { Button, ClassList, H1, KeepClass, Modal, NavigationBar } from '../components';
@@ -10,7 +14,7 @@ interface IState {
   open: boolean;
 }
 
-class Home extends React.PureComponent<IProps,IState> {
+class Home extends React.PureComponent<IProps & IMapStateToProps,IState> {
 	public state = {
     open: false,
   };
@@ -25,7 +29,8 @@ class Home extends React.PureComponent<IProps,IState> {
 	public render() {
 		const brainBackground = require("../assets/img/brain-background.jpg");
 		const logo = require("../assets/img/logo.png")
-
+		
+		if (!sessionStorage.getItem('userData')) { return <Redirect to="/" /> }
 		return (
 			<HomeWrap brainBackground={brainBackground}>
 				<div id='brainBackground'>
@@ -109,4 +114,14 @@ const HomeWrap = styled.div`
     }
 `;
 
-export default Home;
+
+// REDUX STATE
+interface IMapStateToProps {
+  signInSuccess: boolean;
+};
+
+const mapStateToProps = (state: IRootState): IMapStateToProps => ({
+  signInSuccess: selectSignInSuccess(state),
+});
+
+export default connect(mapStateToProps)(Home);

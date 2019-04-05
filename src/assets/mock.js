@@ -9,7 +9,7 @@ export const listJF = [
   {cod: 2,name: 'Julgamento de fatos A', status:'Em execução', turma:'SI', time:'2', membros:'5', qtdFatos:25, qtdEquipes:10 },
   {cod: 1,name: 'Julgamento de fatos B', status:'Finalizado', turma:'SI', time:'2', membros:'5', qtdFatos:25, qtdEquipes:10 },
   {cod: 3,name: 'Julgamento de fatos C', status:'Em preparação', turma:'SI', time:'2', membros:'5', qtdFatos:25, qtdEquipes:10 },
-  {cod: 3,name: 'Julgamento de fatos D', status:'Em preparação', turma:'SI', time:'2', membros:'5', qtdFatos:25, qtdEquipes:10 },
+  {cod: 5,name: 'Julgamento de fatos D', status:'Em preparação', turma:'SI', time:'2', membros:'5', qtdFatos:25, qtdEquipes:10 },
   {cod: 4,name: 'Julgamento de fatos E', status:'Em criação', turma:'SI', time:'2', membros:'5', qtdFatos:25, qtdEquipes:10 },
 ]
 

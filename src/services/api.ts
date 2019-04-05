@@ -6,13 +6,18 @@ export async function apiRequestCourses(): Promise<any> {
 }
 
 export async function apiSignUp(payload: any): Promise<{ data: { msg: any } }>  {
-	console.log(payload)
 	const headers: any = {};
 	return axios.post(`http://localhost/everdade/index.php/usuario/cadastro`, { ...payload} , { headers });
 }
 
-export async function apiSignIn(payload: any): Promise<{ data: { msg: any } }>  {
-	console.log(payload)
+export async function apiSignIn(payload: any): Promise<{ data: any }>{
 	const headers: any = {};
 	return axios.post(`http://localhost/everdade/index.php/usuario/login`, { ...payload} , { headers });
+}
+
+
+export async function apiRequestUnits(): Promise<any> {
+	const units: any = await axios.get(`http://localhost/everdade/index.php/unidades`);
+	console.log('api',units)
+	return units.data;
 }

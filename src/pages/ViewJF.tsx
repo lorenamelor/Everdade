@@ -3,6 +3,7 @@ import Card from '@material-ui/core/Card';
 import { connect } from 'react-redux';
 
 import * as React from 'react';
+import { Redirect } from 'react-router';
 import { IRootState } from 'src/store';
 import { selectLoginType } from 'src/store/app/state';
 import styled from 'styled-components';
@@ -25,6 +26,7 @@ class ViewJF extends React.PureComponent<IMapStateToProps> {
   public render() {
 
     const { loginType } = this.props;
+    if (!sessionStorage.getItem('userData')) { return <Redirect to="/" /> }
     return (
       <ViewJFWrap>
         <NavigationBar max returnUrl='/turma' />

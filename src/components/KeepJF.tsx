@@ -49,7 +49,7 @@ class KeepJF extends React.Component<IProps> {
               margin="normal"
             >
               {listItems.map(option => (
-                <MenuItem key={option.name} value={option.name}>
+                <MenuItem key={option.cod} value={option.name}>
                   {option.name}
                 </MenuItem>
               ))}

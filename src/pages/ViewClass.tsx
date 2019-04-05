@@ -6,20 +6,17 @@ import { Start } from '../pages';
 
 
 import * as React from 'react';
+import { Redirect } from 'react-router';
 import { IRootState } from 'src/store';
 import { selectLoginType } from 'src/store/app/state';
 import styled from 'styled-components';
 import { ExpansionPanel, H1, KeepJF, Modal, NavigationBar } from '../components';
 
-// tslint:disable-next-line:no-empty-interface
-interface IProps {
-
-}
 interface IState {
   open: boolean;
 }
 
-class ViewClass extends React.PureComponent<IProps & IMapStateToProps, IState> {
+class ViewClass extends React.PureComponent<IMapStateToProps, IState> {
   public state = {
     open: false,
   };
@@ -34,7 +31,7 @@ class ViewClass extends React.PureComponent<IProps & IMapStateToProps, IState> {
   public render() {
 
     const { loginType } = this.props;
-
+    if (!sessionStorage.getItem('userData')) { return <Redirect to="/" /> }
     return (
       <ViewClassWrap>
         <NavigationBar max returnUrl='/home' />
