@@ -51,13 +51,24 @@ const INITIAL_STATE: IState = {
 	signOutSuccess: false,
 };
 
+const getUsertipo = () => {
+	if(sessionStorage && sessionStorage.getItem('userData')) { 
+	 const userData = sessionStorage!.getItem('userData')
+	 console.log('userdata', userData);
+	 return 'aluno';
+	}
+	return 'professor'
+}
+
+
+
 // REDUCER
 
 export default reducerWithInitialState(INITIAL_STATE)
 	.case(init, (state: IState) => ({
 		...state,
 		initialized: true,
-		// login: sessionStorage.getItem('userData') ? sessionStorage.getItem('userData').tipo : null,
+	 login: getUsertipo(),
 	}))
 	.case(loginType,(state:IState, type) => ({
 		...state,
@@ -84,10 +95,12 @@ export default reducerWithInitialState(INITIAL_STATE)
 		...state,
 		signInSuccess: true,
 		isSignIn: !state.isSignIn,
+		signOutSuccess: false,
 	}))
 	.case(signOut.done, (state: IState) => ({
 		...state,
 		signOutSuccess: true,
+		signInSuccess: false,
 		isSignIn: !state.isSignIn
 
 	}))

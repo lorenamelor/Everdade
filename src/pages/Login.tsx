@@ -1,4 +1,5 @@
 import * as React from 'react';
+// import { Redirect } from 'react-router';
 import styled from 'styled-components';
 import { FormLogin } from '../components';
 
@@ -23,7 +24,7 @@ class Login extends React.PureComponent<IProps, IState> {
 	public render() {
 		const brainBackground = require("../assets/img/brain-extends.jpg");
 		const logo = require("../assets/img/logo.png")
-
+		// if(sessionStorage.getItem('userData')){ return <Redirect to="/home" /> };
 		return (
 			<LoginWrap brainBackground={brainBackground}>
 				<div id='brainBackground'>

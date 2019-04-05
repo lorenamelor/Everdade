@@ -74,7 +74,7 @@ class KeepJF extends React.Component<IMapDispatchToProps & IMapStateToProps> {
 
             <TextField
               id="select-class"
-              className='input-max'
+              className='input'
               select
               label="Alunos"
               margin="normal"
@@ -110,10 +110,6 @@ const Wrap = styled.div`
       width:98%;
     }
   }
-  .input-max{
-    margin: 0 5px 15px 5px;
-    width: 98%; 
-  } 
 }
 `
 

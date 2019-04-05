@@ -18,6 +18,5 @@ export async function apiSignIn(payload: any): Promise<{ data: any }>{
 
 export async function apiRequestUnits(): Promise<any> {
 	const units: any = await axios.get(`http://localhost/everdade/index.php/unidades`);
-	console.log('api',units)
 	return units.data;
 }

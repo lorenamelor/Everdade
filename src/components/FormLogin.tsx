@@ -14,7 +14,7 @@ class FormLogin extends React.Component<IMapDispatchToProps & IMapStateToProps>{
   public render() {
     const { signInSuccess } = this.props;
 
-    if (signInSuccess &&  sessionStorage.getItem('userData')) { return <Redirect to="/home" /> }
+    if (signInSuccess) { return <Redirect to="/home" /> }
     return (
       <Wrap>
         <Formik
