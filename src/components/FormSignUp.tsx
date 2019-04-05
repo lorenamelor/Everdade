@@ -8,10 +8,8 @@ import styled from 'styled-components';
 import * as Yup from 'yup';
 
 import { FormControlLabel, InputAdornment, MenuItem, Radio, RadioGroup, TextField } from '@material-ui/core';
-import { IUserSignUp, requestCourses, selectCourses, selectSignUpSuccess, signUp } from 'src/store/app/state';
+import { IUserSignUp, requestCourses, selectCourses, selectIsSignUp, selectSignUpSuccess, signUp } from 'src/store/app/state';
 import { Button } from '../components';
-
-// import { cursos } from '../assets/mock'
 
 // validate form
 const SignupSchema = Yup.object().shape({
@@ -19,7 +17,7 @@ const SignupSchema = Yup.object().shape({
     .required("Tipo é obrigatório"),
   nome: Yup.string()
     .required("Nome é obrigatório"),
-  curso: Yup.string().when('tipo', {
+  idCurso: Yup.string().when('tipo', {
     is: (val) => val === 'aluno',
     then: Yup.string().required("Curso é obrigatório"),
     otherwise: Yup.string().notRequired(),
@@ -45,7 +43,8 @@ class FormSignUp extends React.Component<IMapStateToProps & IMapDispatchToProps>
   }
   
   public render() {
-    const { signUpSuccess, courses } = this.props;
+    const { signUpSuccess, courses, isSignUp } = this.props;
+
     if(signUpSuccess) { return <Redirect to="/" /> }
     return (
       <Wrap>
@@ -54,17 +53,16 @@ class FormSignUp extends React.Component<IMapStateToProps & IMapDispatchToProps>
             tipo: 'aluno',
             nome: '',
             email: '',
-            curso: '',
+            idCurso: '',
             login: '',
             senha: '',
             confirmarSenha: '',
           }}
           validationSchema={SignupSchema}
-          // tslint:disable-next-line:jsx-no-lambda
           onSubmit={values => this.props.signUp(values)}
         >
-          {({ errors, touched, values: { tipo, nome, curso, email, senha, login, confirmarSenha }, 
-           handleChange, isValid,  setFieldTouched }) => {
+          {({ errors, touched, values: { tipo, nome, idCurso, email, senha, login, confirmarSenha }, 
+           handleChange, setFieldTouched }) => {
             const change = (nameInput: any, e: any) => {
               e.persist();
               handleChange(e);
@@ -82,7 +80,7 @@ class FormSignUp extends React.Component<IMapStateToProps & IMapDispatchToProps>
                 >
                   <RadioButtom
                     value="aluno"
-                    control={<Radio color="primary" />}
+                    control={<Radio color="primary"/>}
                     label={<p><img id="study" src={require('../assets/icons/study.png')} /> Aluno</p>}
                     labelPlacement="end"
                   />
@@ -113,7 +111,7 @@ class FormSignUp extends React.Component<IMapStateToProps & IMapDispatchToProps>
                   name='email'
                   label="Email"
                   value={email}
-                  helperText={touched.email ? errors.email : ""}
+                  helperText={!touched.email ? errors.email : ""}
                   error={touched.email && Boolean(errors.email)}
                   onChange={change.bind(null, "email")}
                   InputProps={{
@@ -125,15 +123,14 @@ class FormSignUp extends React.Component<IMapStateToProps & IMapDispatchToProps>
                 />
                 {tipo === 'aluno' ?
                   < TextField
-                    id="standard-select-currency"
                     className='input'
-                    name='curso'
+                    name='idCurso'
                     select
                     label="Curso"
-                    value={curso}
-                      helperText={touched.curso ? errors.curso : ""}
-                    error={touched.curso && Boolean(errors.curso)}
-                    onChange={change.bind(null, "curso")}
+                    value={idCurso}
+                      helperText={touched.idCurso ? errors.idCurso : ""}
+                    error={touched.idCurso && Boolean(errors.idCurso)}
+                    onChange={change.bind(null, "idCurso")}
                     InputProps={{
                       startAdornment:
                         <InputAdornment position="start">
@@ -144,7 +141,7 @@ class FormSignUp extends React.Component<IMapStateToProps & IMapDispatchToProps>
                   {!(courses.length > 0) 
                   ? <MenuItem>Selecione um curso</MenuItem>
                   : courses.map((option:{id_curso: string, nome: string}) => (
-                      <MenuItem key={option.id_curso} value={option.nome}>
+                      <MenuItem key={option.id_curso} value={option.id_curso}>
                         {option.nome}
                       </MenuItem>
                     ))}
@@ -204,7 +201,7 @@ class FormSignUp extends React.Component<IMapStateToProps & IMapDispatchToProps>
                     }}
                   />
                 </div>
-                <Button type="submit" width="60%">Cadastrar</Button>
+                <Button type="submit" width="60%" loading={isSignUp}>Cadastrar</Button>
                 <p>Ja possui uma conta? <Link to="/" id='link'>Fazer Login</Link></p>
               </Form>
             )
@@ -283,18 +280,20 @@ interface IMapDispatchToProps {
 
 const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
   requestCourses: () => dispatch(requestCourses.started()),
-  signUp: (payload) => dispatch(signUp.started(payload))
+  signUp: (payload) => dispatch(signUp.started(payload)),
 })
 
 // REDUX STATE
 interface IMapStateToProps {
   courses: [];
   signUpSuccess: boolean;
+  isSignUp: boolean;
 };
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({
   courses: selectCourses(state),
   signUpSuccess: selectSignUpSuccess(state),
+  isSignUp: selectIsSignUp(state),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormSignUp);

@@ -1,6 +1,6 @@
 import { combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
-import { catchError, filter, map, mergeMap } from 'rxjs/operators';
+import { catchError, filter, map, mapTo, mergeMap, tap } from 'rxjs/operators';
 import actionCreatorFactory from 'typescript-fsa';
 import { reducerWithInitialState } from 'typescript-fsa-reducers/dist';
 import { Epic, Selector } from '..';
@@ -11,6 +11,8 @@ export const selectLoginType: Selector<'professor' | 'aluno'> = ({ appState }) =
 export const selectCourses: Selector<[]> = ({ appState }) => appState.courses;
 export const selectSignUpSuccess: Selector<boolean> = ({ appState }) => appState.signUpSuccess;
 export const selectSignInSuccess: Selector<boolean> = ({ appState }) => appState.signInSuccess;
+export const selectIsSignUp: Selector<boolean> = ({ appState }) => appState.isSignUp;
+export const selectIsSignOut: Selector<boolean> = ({ appState }) => appState.signOutSuccess;
 
 
 export interface IUserSignUp {curso?
@@ -23,6 +25,7 @@ export const loginType = actionCreator<'professor' | 'aluno'>('LOGIN_TYPE');
 export const requestCourses = actionCreator.async<undefined, any>('REQUEST_COURSES');
 export const signUp = actionCreator.async<IUserSignUp, any, any>('SIGN_UP');
 export const signIn = actionCreator.async<{login: string, senha: string}, any, any>('SIGN_IN');
+export const signOut = actionCreator.async<undefined, any, any>('SIGN_OUT');
 
 
 // STATE
@@ -34,6 +37,7 @@ export interface IState {
 	signUpSuccess: boolean;
 	isSignIn: boolean;
 	signInSuccess: boolean;
+	signOutSuccess: boolean;
 }
 
 const INITIAL_STATE: IState = {
@@ -44,6 +48,7 @@ const INITIAL_STATE: IState = {
 	signUpSuccess: false,
 	isSignIn: false,
 	signInSuccess: false,
+	signOutSuccess: false,
 };
 
 // REDUCER
@@ -61,22 +66,28 @@ export default reducerWithInitialState(INITIAL_STATE)
 		...state,
 		courses,
 	}))
-	.cases([signUp.started, signUp.done, signUp.failed], (state: IState) => ({
+	.cases([signUp.started, signUp.failed], (state: IState) => ({
 		...state,
 		isSignUp: !state.isSignUp
 	}))
 	.case(signUp.done, (state: IState) => ({
 		...state,
-		signUpSuccess: true
+		signUpSuccess: true,
+		isSignUp: !state.isSignUp
 
-	}))	.cases([signIn.started, signIn.done, signIn.failed], (state: IState) => ({
+	}))	.cases([signIn.started, signIn.failed], (state: IState) => ({
 		...state,
 		isSignIn: !state.isSignIn
 	}))
 	.case(signIn.done, (state: IState) => ({
 		...state,
-		signInSuccess: true
+		signInSuccess: true,
+		isSignIn: !state.isSignIn
 
+	}))
+	.case(signOut.done, (state: IState) => ({
+		...state,
+		signOutSuccess: true,
 	}))
 	.build();
 
@@ -100,13 +111,26 @@ const signUpEpic: Epic = (action$) => action$.pipe(
 const signInEpic: Epic = (action$) => action$.pipe(
 	filter(signIn.started.match),
 	mergeMap(({payload}) => from(apiSignIn(payload)).pipe(
-		map(({ data }) => signIn.done({ params: { ...payload }, result: { data }})),
+		map(({ data }) => {
+			if(data.userData){
+				sessionStorage.setItem('userData', JSON.stringify(data.userData[0]))
+			}
+			return signIn.done({ params: { ...payload }, result: { data }})}),
 		catchError((error) => of(signIn.failed({ params: { ...payload }, error }))),
 	)),
+);
+
+const signOutEpic: Epic = (action$) => action$.pipe(
+  filter(signOut.started.match),
+  tap(() => {
+		sessionStorage.removeItem('userData');
+  }),
+  mapTo(signOut.done({})),
 );
 
 export const epics = combineEpics(
 	requestCoursesEpic,
 	signUpEpic,
 	signInEpic,
+	signOutEpic,
 );

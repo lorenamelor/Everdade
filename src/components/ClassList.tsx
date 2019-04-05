@@ -15,7 +15,7 @@ function ClassList(props: any) {
       <List component="nav">
         {map(listItems, (item) =>
           <div>
-            <ListItem button key={item.name}>
+            <ListItem button key={item.cod}>
               <ListItemText primary={item.name} />
               <ActionsButtons viewUrl='/turma' />
             </ListItem>

@@ -1,5 +1,6 @@
 import Btn from '@material-ui/core/Button';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
 import * as React from 'react';
 import styled from 'styled-components';
 
@@ -9,11 +10,14 @@ interface IProps{
   delet?: boolean;
   type?: string,
   width?: string,
+  loading?: boolean,
 }
 
-const Button: React.SFC<IProps> = ({handleClick, delet, children, width, type}) => {
+const Button: React.SFC<IProps> = ({handleClick, delet, children, width, type, loading}) => {
   return (
-    <ButtonStyled delet={delet} onClick={handleClick} type={type}  width={width}>{children}</ButtonStyled>
+    <ButtonStyled delet={delet} onClick={handleClick} type={type}  width={width}>
+     { loading ? <CircularProgress size={18} style={{color: '#FFF'}}/> : children }
+    </ButtonStyled>
   );
 }
 
@@ -32,4 +36,5 @@ const ButtonStyled = styled(Btn) `
    }
  }
 `
+
 export default Button;

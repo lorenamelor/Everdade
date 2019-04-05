@@ -1,16 +1,26 @@
+// import { InputAdornment } from '@material-ui/core'
 import Card from '@material-ui/core/Card';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import * as React from 'react';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import { IRootState } from 'src/store';
+import { requestUnits, selectUnits } from 'src/store/app/class';
+import { requestCourses, selectCourses } from 'src/store/app/state';
 import styled from 'styled-components';
-import { cursos, unidades } from '../assets/mock'
+import { unidades } from '../assets/mock'
 import { Button, H1 } from '../components'
 
-// tslint:disable-next-line:no-empty-interface
-interface IProps {}
+class KeepJF extends React.Component<IMapDispatchToProps & IMapStateToProps> {
+  public componentDidMount() {
+    this.props.requestCourses();
+    this.props.requestUnits();
+  }
 
-class KeepJF extends React.Component<IProps> {
   public render() {
+    const { courses, units } = this.props;
+    console.log(courses, units);
     return (
       <Wrap>
         <div>
@@ -23,20 +33,30 @@ class KeepJF extends React.Component<IProps> {
               margin="normal"
             />
 
-            <TextField
-              id="standard-select-currency"
+            {/* < TextField
               className='input'
-
+              name='idCurso'
               select
               label="Curso"
-              margin="normal"
+              value={idCurso}
+              helperText={touched.idCurso ? errors.idCurso : ""}
+              error={touched.idCurso && Boolean(errors.idCurso)}
+              onChange={change.bind(null, "idCurso")}
+              InputProps={{
+                startAdornment:
+                  <InputAdornment position="start">
+                    <img src={require('../assets/icons/course.png')} />
+                  </InputAdornment>,
+              }}
             >
-              {cursos.map(option => (
-                <MenuItem key={option} value={option}>
-                  {option}
-                </MenuItem>
-              ))}
-            </TextField>
+              {!(courses.length > 0)
+                ? <MenuItem>Selecione um curso</MenuItem>
+                : courses.map((option: { id_curso: string, nome: string }) => (
+                  <MenuItem key={option.id_curso} value={option.id_curso}>
+                    {option.nome}
+                  </MenuItem>
+                ))}
+            </TextField> */}
 
             <TextField
               id="select-class"
@@ -54,7 +74,7 @@ class KeepJF extends React.Component<IProps> {
 
             <TextField
               id="select-class"
-              className='input'
+              className='input-max'
               select
               label="Alunos"
               margin="normal"
@@ -89,7 +109,35 @@ const Wrap = styled.div`
     @media (max-width: 800px){
       width:98%;
     }
-  }  
+  }
+  .input-max{
+    margin: 0 5px 15px 5px;
+    width: 98%; 
+  } 
 }
 `
-export default KeepJF;
+
+
+// REDUX ACTIONS
+interface IMapDispatchToProps {
+  requestCourses: () => void;
+  requestUnits: () => void;
+}
+
+const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
+  requestCourses: () => dispatch(requestCourses.started()),
+  requestUnits: () => dispatch(requestUnits.started()),
+})
+
+// REDUX STATE
+interface IMapStateToProps {
+  courses: [];
+  units: [];
+};
+
+const mapStateToProps = (state: IRootState): IMapStateToProps => ({
+  courses: selectCourses(state),
+  units: selectUnits(state),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(KeepJF);
