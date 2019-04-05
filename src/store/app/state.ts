@@ -88,6 +88,12 @@ export default reducerWithInitialState(INITIAL_STATE)
 	.case(signOut.done, (state: IState) => ({
 		...state,
 		signOutSuccess: true,
+		isSignIn: !state.isSignIn
+
+	}))
+	.case(signOut.done, (state: IState) => ({
+		...state,
+		signOutSuccess: true,
 	}))
 	.build();
 
