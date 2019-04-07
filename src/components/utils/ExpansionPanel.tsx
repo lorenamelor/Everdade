@@ -121,7 +121,7 @@ const Highlighter = styled.div`
 
 
 interface IMapStateToProps {
-  loginType: 'professor' | 'aluno';
+  loginType: 'professor' | 'aluno' | null;
 };
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({

@@ -13,9 +13,9 @@ function ClassList(props: any) {
   return (
     <div>
       <List component="nav">
-        {map(listItems, (item) =>
-          <div>
-            <ListItem button key={item.cod}>
+        {map(listItems, (item, index) =>
+          <div key={index.toString()}>
+            <ListItem button >
               <ListItemText primary={item.name} />
               <ActionsButtons viewUrl='/turma' />
             </ListItem>

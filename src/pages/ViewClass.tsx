@@ -2,7 +2,6 @@ import Btn from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import { connect } from 'react-redux';
 import { listJF } from '../assets/mock';
-import { Start } from '../pages';
 
 
 import * as React from 'react';
@@ -35,7 +34,6 @@ class ViewClass extends React.PureComponent<IMapStateToProps, IState> {
     return (
       <ViewClassWrap>
         <NavigationBar max returnUrl='/home' />
-        <Start/>
         <div>
           <H1>Turma exemplo</H1>
           <Card className='card'>
@@ -67,7 +65,7 @@ class ViewClass extends React.PureComponent<IMapStateToProps, IState> {
 }
 
 interface IMapStateToProps {
-  loginType: 'professor' | 'aluno';
+  loginType: 'professor' | 'aluno' | null;
 };
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({

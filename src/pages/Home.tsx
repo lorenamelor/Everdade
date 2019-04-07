@@ -6,7 +6,6 @@ import { selectSignInSuccess } from 'src/store/app/state';
 import styled from 'styled-components';
 import { listItems } from '../assets/mock'
 import { Button, ClassList, H1, KeepClass, Modal, NavigationBar } from '../components';
-import { Start } from '../pages';
 
 // tslint:disable-next-line:no-empty-interface
 interface IProps {}
@@ -39,7 +38,6 @@ class Home extends React.PureComponent<IProps & IMapStateToProps,IState> {
 				</div>
 				<div>
 					<NavigationBar />
-					<Start />
 					<div>
 						<div id='header'>
 							<H1>Turmas</H1>

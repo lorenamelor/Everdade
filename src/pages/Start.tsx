@@ -11,20 +11,20 @@ class Home extends React.PureComponent<IMapDispatchToProps & IMapStateToProps> {
 const { login } = this.props;
     return (
       <div style={{ display: 'flex', justifyContent: 'space-between', width: '170px', marginTop:10, marginLeft:10 }}>
-        <input onClick={this.handleLoginType('aluno')} checked={login ==='aluno'} type="radio" name='login' /> Aluno
-        <input onClick={this.handleLoginType('professor')} checked={login ==='professor'} type="radio" name='login' /> Professor
+        <input onChange={()=>({})} onClick={this.handleLoginType('aluno')} checked={login ==='aluno'} type="radio" name='login' /> Aluno
+        <input onChange={()=>({})} onClick={this.handleLoginType('professor')} checked={login ==='professor'} type="radio" name='login' /> Professor
       </div>
 
     );
   }
 
-  public handleLoginType = (type: 'professor' | 'aluno') => () => {
+  public handleLoginType = (type: 'professor' | 'aluno' | null) => () => {
     this.props.loginType(type);
   };
 }
 
 interface IMapDispatchToProps {
-  loginType: (type: 'professor' | 'aluno') => void;
+  loginType: (type: 'professor' | 'aluno' | null) => void;
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
@@ -33,7 +33,7 @@ const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
 
 
 interface IMapStateToProps {
-  login: 'professor' | 'aluno';
+  login: 'professor' | 'aluno' | null;
 };
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({

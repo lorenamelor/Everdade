@@ -9,7 +9,6 @@ import { selectLoginType } from 'src/store/app/state';
 import styled from 'styled-components';
 import { listFacts, listJF, listTeam } from '../assets/mock'
 import { Button, CreateTeam, ExpansionPanel, H1, InfoJF, Modal, NavigationBar, Topics } from '../components';
-import { Start } from '../pages';
 
 class ViewJF extends React.PureComponent<IMapStateToProps> {
   public state = {
@@ -30,7 +29,6 @@ class ViewJF extends React.PureComponent<IMapStateToProps> {
     return (
       <ViewJFWrap>
         <NavigationBar max returnUrl='/turma' />
-        <Start />
         <div>
           <H1>Julgamento de fatos sobre casos de uso</H1>
           <Card className='card'><InfoJF item={listJF[0]} /></Card>
@@ -68,7 +66,7 @@ class ViewJF extends React.PureComponent<IMapStateToProps> {
 }
 
 interface IMapStateToProps {
-  loginType: 'professor' | 'aluno';
+  loginType: 'professor' | 'aluno' | null;
 };
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({

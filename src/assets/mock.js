@@ -29,4 +29,4 @@ export const listTeam = [
 
 export const cursos = ['Sistemas de Informação', 'Ciências da computação', 'Analise e desenvolvimento de sistemas', 'Engenharia da computação'];
 
-export const unidades = ['Barreiro', 'Corel', 'Liberdade', 'Coração Eucarístico']
+export const unidades = [{id_unidade: "19", nome: "Barreiro"}, {id_unidade: "19", nome: "Barreiro"}, {id_unidade: "20", nome: "Praca Liberdade"}, {id_unidade: "21", nome: "Coracao Eucaristico"}]

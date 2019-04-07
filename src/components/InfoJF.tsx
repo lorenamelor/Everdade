@@ -56,7 +56,7 @@ class InfoJS extends React.PureComponent<IProps & IMapStateToProps, IState> {
 }
 
 interface IMapStateToProps {
-  loginType: 'professor' | 'aluno';
+  loginType: 'professor' | 'aluno' | null;
 };
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({

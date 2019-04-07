@@ -41,7 +41,7 @@ const ActionsButtons: React.SFC<Iprops & IMapStateToProps> = ({ viewUrl, loginTy
 }
 
 interface IMapStateToProps {
-  loginType: 'professor' | 'aluno';
+  loginType: 'professor' | 'aluno' | null;
 };
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({

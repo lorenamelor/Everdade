@@ -7,10 +7,15 @@ import { IRootState } from 'src/store';
 import styled from 'styled-components';
 
 import { InputAdornment, TextField } from '@material-ui/core';
-import { selectSignInSuccess, signIn } from 'src/store/app/state';
+import { resetSignOut, selectSignInSuccess, signIn } from 'src/store/app/state';
 import { Button } from '../components'
 
 class FormLogin extends React.Component<IMapDispatchToProps & IMapStateToProps>{
+
+  public componentDidMount(){
+    this.props.resetSignOut();
+  }
+
   public render() {
     const { signInSuccess } = this.props;
 
@@ -113,10 +118,12 @@ const Wrap = styled.div`
 // REDUX ACTIONS
 interface IMapDispatchToProps {
   signIn: (payload: { login: string, senha: string }) => void;
+  resetSignOut: () => void;
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
-  signIn: (payload) => dispatch(signIn.started(payload))
+  signIn: (payload) => dispatch(signIn.started(payload)),
+  resetSignOut: () => dispatch(resetSignOut({})),
 })
 
 // REDUX STATE

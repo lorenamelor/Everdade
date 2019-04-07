@@ -7,7 +7,7 @@ import { Epic, Selector } from '..';
 import { apiRequestCourses, apiSignIn, apiSignUp } from '../../services/api';
 
 // SELECTORS
-export const selectLoginType: Selector<'professor' | 'aluno'> = ({ appState }) => appState.login;
+export const selectLoginType: Selector<'professor' | 'aluno' | null> = ({ appState }) => appState.login;
 export const selectCourses: Selector<[]> = ({ appState }) => appState.courses;
 export const selectSignUpSuccess: Selector<boolean> = ({ appState }) => appState.signUpSuccess;
 export const selectSignInSuccess: Selector<boolean> = ({ appState }) => appState.signInSuccess;
@@ -21,17 +21,19 @@ export interface IUserSignUp {curso?
 // ACTIONS
 const actionCreator = actionCreatorFactory('APP::STATE');
 export const init = actionCreator('INIT');
-export const loginType = actionCreator<'professor' | 'aluno'>('LOGIN_TYPE');
+export const loginType = actionCreator<'professor' | 'aluno' | null>('LOGIN_TYPE');
 export const requestCourses = actionCreator.async<undefined, any>('REQUEST_COURSES');
 export const signUp = actionCreator.async<IUserSignUp, any, any>('SIGN_UP');
 export const signIn = actionCreator.async<{login: string, senha: string}, any, any>('SIGN_IN');
 export const signOut = actionCreator.async<undefined, any, any>('SIGN_OUT');
+export const resetSignOut = actionCreator<any>('RESET_SIGN_OUT');
+
 
 
 // STATE
 export interface IState {
 	initialized: boolean;
-	login: 'professor' | 'aluno';
+	login: 'professor' | 'aluno' | null;
 	courses: [];
 	isSignUp: boolean;
 	signUpSuccess: boolean;
@@ -51,15 +53,13 @@ const INITIAL_STATE: IState = {
 	signOutSuccess: false,
 };
 
-const getUsertipo = () => {
+export const getUser = (value: any) => {
 	if(sessionStorage && sessionStorage.getItem('userData')) { 
 	 const userData = sessionStorage!.getItem('userData')
-	 console.log('userdata', userData);
-	 return 'aluno';
+	 return JSON.parse(userData!)[value];
 	}
-	return 'professor'
+	return null;
 }
-
 
 
 // REDUCER
@@ -68,7 +68,7 @@ export default reducerWithInitialState(INITIAL_STATE)
 	.case(init, (state: IState) => ({
 		...state,
 		initialized: true,
-	 login: getUsertipo(),
+	 login: getUser('tipo'),
 	}))
 	.case(loginType,(state:IState, type) => ({
 		...state,
@@ -96,17 +96,21 @@ export default reducerWithInitialState(INITIAL_STATE)
 		signInSuccess: true,
 		isSignIn: !state.isSignIn,
 		signOutSuccess: false,
+		login: getUser('tipo'),
 	}))
 	.case(signOut.done, (state: IState) => ({
 		...state,
 		signOutSuccess: true,
 		signInSuccess: false,
 		isSignIn: !state.isSignIn
-
 	}))
 	.case(signOut.done, (state: IState) => ({
 		...state,
 		signOutSuccess: true,
+	}))
+	.case(resetSignOut, (state: IState) => ({
+		...state,
+		signUpSuccess: false,
 	}))
 	.build();
 

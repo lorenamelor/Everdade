@@ -2,10 +2,13 @@ import { toast } from 'react-toastify';
 import { combineEpics } from 'redux-observable';
 import { Epic } from '../';
 
+
 import { css } from 'glamor';
 import { filter, mapTo, tap } from 'rxjs/operators';
 import actionCreatorFactory from 'typescript-fsa';
+import { classRegistration } from './class';
 import { signIn, signUp } from './state';
+
 
 const actionCreator = actionCreatorFactory('APP::NOTIFICATION');
 export const showToast = actionCreator('SHOW_TOAST');
@@ -34,8 +37,15 @@ const signInErrorEpic: Epic = (action$) => action$.pipe(
   mapTo(showToast())
 )
 
+const classRegistrationSuccessEpic: Epic = (action$) => action$.pipe(
+  filter(classRegistration.done.match),
+  tap(() => toatSuccess("Turma cadastrada !")),
+  mapTo(showToast())
+)
+
 export const epics = combineEpics(
   signUpSuccessEpic,
   signInErrorEpic,
   signUpErrorEpic,
+  classRegistrationSuccessEpic,
 );

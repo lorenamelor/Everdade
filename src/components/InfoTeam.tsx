@@ -39,7 +39,7 @@ const InfoTeam: React.SFC<IProps & IMapStateToProps> = ({ item, loginType }) => 
 }
 
 interface IMapStateToProps {
-  loginType: 'professor' | 'aluno';
+  loginType: 'professor' | 'aluno' | null;
 };
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({
