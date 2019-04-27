@@ -38,13 +38,13 @@ const FormKeepClass = (props: any) => {
      classRegistration, 
      editValues, 
      requestStudents,
+     closeModal,
      classEdit,
       // courses,
       // units,
       students,
      } = props;
  
-   console.log('editValues',editValues)
 
     // @TODO remove mock
     const courses = [{ nome: 'SI', id_curso: '1' }, { nome: 'ADS', id_curso: '2' }];
@@ -57,10 +57,10 @@ const FormKeepClass = (props: any) => {
           enableReinitialize
           validationSchema={SignupSchema}
           onSubmit={values => {
-            idClass 
+            idClass !== ''
             ? classEdit(values)
             : classRegistration(values)
-            // this.props.closeModal() 
+            closeModal() 
           }}
         >
           {({ errors, touched, values: { nome, idCurso, idUnidade, disciplina, alunos },
@@ -163,7 +163,9 @@ const FormKeepClass = (props: any) => {
                           </div>
                         )}
                       >
-                        {students.length > 0 && students.map((aluno: any) => (
+                        {!(students.length > 0) 
+                        ? <MenuItem>Não há alunos neste curso</MenuItem>
+                        : students.map((aluno: any) => (
                           <MenuItem key={aluno.id_aluno} value={aluno.id_aluno}>
                             {aluno.nome}
                           </MenuItem>

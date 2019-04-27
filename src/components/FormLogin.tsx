@@ -28,7 +28,6 @@ class FormLogin extends React.Component<IMapDispatchToProps & IMapStateToProps>{
             senha: '',
           }}
           onSubmit={values => {
-            console.log(values);
             this.props.signIn(values)
           }}
         >

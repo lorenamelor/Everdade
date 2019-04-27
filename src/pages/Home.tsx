@@ -30,6 +30,8 @@ class Home extends React.PureComponent<IProps & IMapStateToProps, IState> {
 
 	public handleClose = () => {
 		this.setState({ open: false });
+		this.setState({ idItem:'' });
+
 	};
 
 	public handleIdItem = (idItem: number | string) => {

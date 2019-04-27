@@ -6,7 +6,7 @@ import { Epic } from '../';
 import { css } from 'glamor';
 import { filter, mapTo, tap } from 'rxjs/operators';
 import actionCreatorFactory from 'typescript-fsa';
-import { classRegistration } from './class';
+import { classEdit, classRegistration } from './class';
 import { signIn, signUp } from './state';
 
 
@@ -21,25 +21,37 @@ const toatSuccess = (msg: any) => toast.success(msg, {
 
 const signUpSuccessEpic: Epic = (action$) => action$.pipe(
   filter(signUp.done.match),
-  tap(() => toatSuccess("Usuário cadastrado !")),
+  tap(() => toatSuccess("Usuário cadastrado!")),
   mapTo(showToast())
 )
 
 const signUpErrorEpic: Epic = (action$) => action$.pipe(
   filter(signUp.failed.match),
-  tap(() => toast.error("Usuário já cadastrado !")),
+  tap(() => toast.error("Usuário já cadastrado")),
   mapTo(showToast())
 )
 
 const signInErrorEpic: Epic = (action$) => action$.pipe(
   filter(signIn.failed.match),
-  tap(() => toast.error("Dados de acesso inválidos !")),
+  tap(() => toast.error("Dados de acesso inválidos")),
   mapTo(showToast())
 )
 
 const classRegistrationSuccessEpic: Epic = (action$) => action$.pipe(
   filter(classRegistration.done.match),
-  tap(() => toatSuccess("Turma cadastrada !")),
+  tap(() => toatSuccess("Turma cadastrada!")),
+  mapTo(showToast())
+)
+
+const classEditSuccessEpic: Epic = (action$) => action$.pipe(
+  filter(classEdit.done.match),
+  tap(() => toatSuccess("Turma Editada!")),
+  mapTo(showToast())
+)
+
+const classEditErrorEpic: Epic = (action$) => action$.pipe(
+  filter(classEdit.failed.match),
+  tap(() => toast.error("Hove um erro ao editar a turma")),
   mapTo(showToast())
 )
 
@@ -48,4 +60,6 @@ export const epics = combineEpics(
   signInErrorEpic,
   signUpErrorEpic,
   classRegistrationSuccessEpic,
+  classEditSuccessEpic,
+  classEditErrorEpic,
 );

@@ -47,13 +47,20 @@ class KeepJF extends React.Component<IMapDispatchToProps & IMapStateToProps & IP
     }
   }
 
+  public componentWillUnmount(){
+    this.setState({
+      editValues: {}
+    })
+  }
+
   public render() {
     const {
       // courses,
       // units,
       students,
       isClassRegistration,
-      idItem } = this.props;
+      idItem,
+      closeModal } = this.props;
     const { editValues } = this.state;
 
     return (
@@ -64,6 +71,7 @@ class KeepJF extends React.Component<IMapDispatchToProps & IMapStateToProps & IP
           classRegistration={this.props.classRegistration}
           classEdit={this.props.classEdit}
           requestStudents={this.props.requestStudents}
+          closeModal={closeModal}
           isClassRegistration={isClassRegistration}
           editValues={editValues}
           students={students} />
