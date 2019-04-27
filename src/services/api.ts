@@ -28,7 +28,18 @@ export async function apiRequestStudents(id_curso: any): Promise<any> {
 }
 
 export async function apiClassRegistration(payload: any): Promise<{ data: { msg: any } }>  {
-	console.log('api', payload)
+	console.log('apiClassRegistration',payload)
 	const headers: any = {};
 	return axios.post(`http://localhost/everdade/index.php/turma/cadastro`, { ...payload} , { headers });
+}
+
+export async function apiRequestClassById(idTurma: number | string): Promise<any> {
+	const classById: any = await axios.get(`http://localhost/everdade/index.php/turma/seleciona?idTurma=${idTurma}`);
+	return classById.data;
+}
+
+export async function apiClassEdit(payload: any): Promise<{ data: { msg: any } }>  {
+	console.log('apiClassEdit',payload)
+	const headers: any = {};
+	return axios.put(`http://localhost/everdade/index.php/turma/editar`, { ...payload} , { headers });
 }

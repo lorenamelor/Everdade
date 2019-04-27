@@ -12,23 +12,31 @@ import { selectLoginType } from '../../store/app/state';
 interface Iprops {
   viewUrl: string;
   onClickEdit?: () => void;
+  openModal: () => void;
+  idItem: number | string;
+  handleIdItem: (idItem: string | number) => void;
 }
 
-const ActionsButtons: React.SFC<Iprops & IMapStateToProps> = ({ viewUrl, loginType, onClickEdit }) => {
-  const viewIcon = require('../../assets/icons/view-icon.png')
-  const editIcon = require('../../assets/icons/edit-icon.png')
-  const deletIcon = require('../../assets/icons/delet-icon.png')
+const handleAction = (props: Iprops) => () => {
+  props.openModal();
+  props.handleIdItem(props.idItem);
+}
 
-  return (
+const ActionsButtons: React.SFC<Iprops & IMapStateToProps> = (props) => {
+  const viewIcon = require('../../assets/icons/view-icon.png');
+  const editIcon = require('../../assets/icons/edit-icon.png');
+  const deletIcon = require('../../assets/icons/delet-icon.png');
+
+   return (
     <span>
-      <Link to={viewUrl}>
+      <Link to={props.viewUrl}>
         <Button background={'#096F66'}>
           <img src={viewIcon} />
         </Button>
       </Link>
-      {loginType === 'professor' ?
+      {props.loginType === 'professor' ?
         <>
-        <Button background={'#00BBD3'} onClick={onClickEdit}>
+        <Button background={'#00BBD3'} onClick={handleAction(props)}>
           <img src={editIcon} />
         </Button>
         <Button background={'#DB4437'}>

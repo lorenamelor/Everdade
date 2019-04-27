@@ -4,31 +4,42 @@ import { Redirect } from 'react-router';
 import { IRootState } from 'src/store';
 import { selectSignInSuccess } from 'src/store/app/state';
 import styled from 'styled-components';
-import { listItems } from '../assets/mock'
+// import { listItems } from '../assets/mock'
 import { Button, ClassList, H1, KeepClass, Modal, NavigationBar } from '../components';
 
 // tslint:disable-next-line:no-empty-interface
-interface IProps {}
+interface IProps { }
 interface IState {
-  open: boolean;
+	open: boolean;
+	idItem: number | string;
 }
 
-class Home extends React.PureComponent<IProps & IMapStateToProps,IState> {
+class Home extends React.PureComponent<IProps & IMapStateToProps, IState> {
 	public state = {
-    open: false,
-  };
+		open: false,
+		idItem: '',
+	};
 
-  public handleOpen = () => {
-    this.setState({ open: true });
-  };
+	public componentWillUnmount(){
+		this.setState({open: false, idItem:''});
+	}
 
-  public handleClose = () => {
-    this.setState({ open: false });
-  };
+	public handleOpen = () => {
+		this.setState({ open: true });
+	};
+
+	public handleClose = () => {
+		this.setState({ open: false });
+	};
+
+	public handleIdItem = (idItem: number | string) => {
+		this.setState({ idItem });
+	};
+
 	public render() {
 		const brainBackground = require("../assets/img/brain-background.jpg");
 		const logo = require("../assets/img/logo.png")
-		
+
 		if (!sessionStorage.getItem('userData')) { return <Redirect to="/" /> }
 		return (
 			<HomeWrap brainBackground={brainBackground}>
@@ -43,8 +54,18 @@ class Home extends React.PureComponent<IProps & IMapStateToProps,IState> {
 							<H1>Turmas</H1>
 							<Button handleClick={this.handleOpen}>CADASTRAR TURMA</Button>
 						</div>
-						<ClassList listItems={listItems} />
-						<Modal openModal={this.state.open} handleClose={this.handleClose} description={<KeepClass />} width='50%'/>
+						<ClassList listItems={[{
+							id_turma: 1,
+							nome: 'Turma de SI',
+							idCurso: '1',
+							idUnidade: '1',
+							idProfessor: '7',
+							disciplina: 'PSI',
+							alunos: ['1']
+						}]}
+							openModal={this.handleOpen}
+							handleIdItem={this.handleIdItem} />
+						<Modal openModal={this.state.open} handleClose={this.handleClose} description={<KeepClass closeModal={this.handleClose} idItem={this.state.idItem} />} width='50%' />
 					</div>
 				</div>
 			</HomeWrap>
@@ -115,11 +136,11 @@ const HomeWrap = styled.div`
 
 // REDUX STATE
 interface IMapStateToProps {
-  signInSuccess: boolean;
+	signInSuccess: boolean;
 };
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({
-  signInSuccess: selectSignInSuccess(state),
+	signInSuccess: selectSignInSuccess(state),
 });
 
 export default connect(mapStateToProps)(Home);
