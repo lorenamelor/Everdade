@@ -8,44 +8,48 @@ import styled from 'styled-components';
 import { IRootState } from 'src/store';
 import { selectLoginType } from '../../store/app/state';
 
-
 interface Iprops {
   viewUrl: string;
   onClickEdit?: () => void;
   openModal: () => void;
   idItem: number | string;
   handleIdItem: (idItem: string | number) => void;
+  handleDelete: (idItem: string | number) => void;
 }
 
-const handleAction = (props: Iprops) => () => {
-  props.openModal();
-  props.handleIdItem(props.idItem);
-}
 
-const ActionsButtons: React.SFC<Iprops & IMapStateToProps> = (props) => {
+class ActionsButtons extends React.Component<Iprops & IMapStateToProps> {
+
+  public handleEdit = (props: Iprops) => () => {
+    props.openModal();
+    props.handleIdItem(props.idItem);
+  }
+    
+  public render(){
   const viewIcon = require('../../assets/icons/view-icon.png');
   const editIcon = require('../../assets/icons/edit-icon.png');
   const deletIcon = require('../../assets/icons/delet-icon.png');
 
    return (
     <span>
-      <Link to={props.viewUrl}>
+      <Link to={`${this.props.viewUrl}/${this.props.idItem}`}>
         <Button background={'#096F66'}>
           <img src={viewIcon} />
         </Button>
       </Link>
-      {props.loginType === 'professor' ?
+      {this.props.loginType === 'professor' ?
         <>
-        <Button background={'#00BBD3'} onClick={handleAction(props)}>
+        <Button background={'#00BBD3'} onClick={this.handleEdit(this.props)}>
           <img src={editIcon} />
         </Button>
-        <Button background={'#DB4437'}>
+        <Button background={'#DB4437'} onClick={() => this.props.handleDelete(this.props.idItem)}>
           <img src={deletIcon} />
         </Button>
         </>
         : null}
     </span>
   );
+}
 }
 
 interface IMapStateToProps {

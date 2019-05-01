@@ -26,7 +26,7 @@ const initialValues= {
   nome: '',
   idCurso: '',
   idUnidade: '',
-  idProfessor: getUser('id_usuario'),
+  idUsuario: getUser('id_usuario'),
   disciplina: '',
   alunos: [],
 }
@@ -69,6 +69,7 @@ const FormKeepClass = (props: any) => {
             const change = (nameInput: any, e: any) => {
               if (nameInput === 'idCurso') {
                 requestStudents(e.target.value);
+                alunos= []
               }
               e.persist();
               handleChange(e);

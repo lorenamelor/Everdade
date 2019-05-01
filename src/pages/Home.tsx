@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
+import { Dispatch } from 'redux';
 import { IRootState } from 'src/store';
-import { selectSignInSuccess } from 'src/store/app/state';
+import { deleteClass, requestClassByUserId, selectClassByUserId } from 'src/store/app/class';
+import { getUser, selectSignInSuccess } from 'src/store/app/state';
 import styled from 'styled-components';
 // import { listItems } from '../assets/mock'
 import { Button, ClassList, H1, KeepClass, Modal, NavigationBar } from '../components';
@@ -14,11 +16,21 @@ interface IState {
 	idItem: number | string;
 }
 
-class Home extends React.PureComponent<IProps & IMapStateToProps, IState> {
+class Home extends React.PureComponent<IProps & IMapStateToProps & IMapDispatchToProps, IState> {
 	public state = {
 		open: false,
 		idItem: '',
 	};
+
+	public componentDidMount(){
+		const userId = getUser('id_usuario')
+		this.props.requestClassByUserId(userId)
+	}
+
+	public getClass = () => {
+		const userId = getUser('id_usuario')
+		this.props.requestClassByUserId(userId)
+	}
 
 	public componentWillUnmount(){
 		this.setState({open: false, idItem:''});
@@ -38,10 +50,16 @@ class Home extends React.PureComponent<IProps & IMapStateToProps, IState> {
 		this.setState({ idItem });
 	};
 
+	public handleDeleteClass = (idClass: number | string) => () => {
+		this.props.deleteClass(idClass);
+
+	}
+
 	public render() {
+		const { classByUserId } = this.props;
 		const brainBackground = require("../assets/img/brain-background.jpg");
 		const logo = require("../assets/img/logo.png")
-
+		console.log('clasbyuser', this.props.classByUserId)
 		if (!sessionStorage.getItem('userData')) { return <Redirect to="/" /> }
 		return (
 			<HomeWrap brainBackground={brainBackground}>
@@ -56,17 +74,15 @@ class Home extends React.PureComponent<IProps & IMapStateToProps, IState> {
 							<H1>Turmas</H1>
 							<Button handleClick={this.handleOpen}>CADASTRAR TURMA</Button>
 						</div>
-						<ClassList listItems={[{
-							id_turma: 1,
-							nome: 'Turma de SI',
-							idCurso: '1',
-							idUnidade: '1',
-							idProfessor: '7',
-							disciplina: 'PSI',
-							alunos: ['1']
-						}]}
-							openModal={this.handleOpen}
-							handleIdItem={this.handleIdItem} />
+							{classByUserId.length > 0 
+							?<ClassList 
+								listItems={classByUserId}
+								openModal={this.handleOpen}
+								handleIdItem={this.handleIdItem} 
+								handleDelete={this.props.deleteClass}
+								/>
+							: <NotFound>Não há turmas cadastradas</NotFound>
+							}
 						<Modal openModal={this.state.open} handleClose={this.handleClose} description={<KeepClass closeModal={this.handleClose} idItem={this.state.idItem} />} width='50%' />
 					</div>
 				</div>
@@ -135,14 +151,33 @@ const HomeWrap = styled.div`
     }
 `;
 
+const NotFound = styled.p`
+	color: #636363;
+	align-self: center;
+	display: flex;
+	justify-content: center;
+	width: 100%;
+`;
+
+interface IMapDispatchToProps {
+	requestClassByUserId: (userId: number | string) => void;
+	deleteClass:(idTurema: number | string) => void;
+}
+
+const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
+	requestClassByUserId: (userId: number | string) => dispatch(requestClassByUserId.started(userId)),
+	deleteClass: (userId: number | string) => dispatch(deleteClass.started(userId)),
+})
 
 // REDUX STATE
 interface IMapStateToProps {
 	signInSuccess: boolean;
+	classByUserId: any,
 };
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({
 	signInSuccess: selectSignInSuccess(state),
+	classByUserId: selectClassByUserId(state),
 });
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

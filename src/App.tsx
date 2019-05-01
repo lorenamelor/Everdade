@@ -25,7 +25,7 @@ class App extends React.Component {
         <Route exact path='/' component={Login} />
         <Route exact path='/signup' component={SignUp} />
         <Route exact path='/home' component={Home} />
-        <Route path='/turma' component={ViewClass} />
+        <Route path='/turma/:idClass' component={ViewClass} />
         <Route path='/jf' component={ViewJF} />
       </div>
     );

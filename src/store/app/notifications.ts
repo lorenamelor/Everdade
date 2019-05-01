@@ -6,7 +6,7 @@ import { Epic } from '../';
 import { css } from 'glamor';
 import { filter, mapTo, tap } from 'rxjs/operators';
 import actionCreatorFactory from 'typescript-fsa';
-import { classEdit, classRegistration } from './class';
+import { classEdit, classRegistration, deleteClass } from './class';
 import { signIn, signUp } from './state';
 
 
@@ -55,6 +55,13 @@ const classEditErrorEpic: Epic = (action$) => action$.pipe(
   mapTo(showToast())
 )
 
+const deleteClassEpic: Epic = (action$) => action$.pipe(
+  filter(deleteClass.done.match),
+  tap(() => toatSuccess("Turma deletada!")),
+  mapTo(showToast())
+)
+
+
 export const epics = combineEpics(
   signUpSuccessEpic,
   signInErrorEpic,
@@ -62,4 +69,5 @@ export const epics = combineEpics(
   classRegistrationSuccessEpic,
   classEditSuccessEpic,
   classEditErrorEpic,
+  deleteClassEpic,
 );

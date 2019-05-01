@@ -52,7 +52,7 @@ class ExpansionPanels extends React.Component<IProps & IMapStateToProps> {
                       : null}
                     {item.name}
                   </p>
-                  {buttons ? <ActionsButtons viewUrl='/jf' onClickEdit={onClickEdit} openModal={()=> ({})} idItem={1} handleIdItem={this.handleIdItem} /> : null}
+                  {buttons ? <ActionsButtons viewUrl='/jf' onClickEdit={onClickEdit} openModal={()=> ({})} idItem={1} handleIdItem={this.handleIdItem} handleDelete={()=> ({})} /> : null}
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                   {this.handleInfo(type, item)}

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { IRootState } from 'src/store';
 import {
-  classEdit, classRegistration, IClass, requestClassById, requestStudents, 
+  classEdit, classRegistration, requestClassById, requestStudents, 
   requestUnits, selectClassById, selectIsClassRegistration, selectStudents, selectUnits,
 } from 'src/store/app/class';
 import { requestCourses, selectCourses } from 'src/store/app/state';
@@ -30,20 +30,22 @@ class KeepJF extends React.Component<IMapDispatchToProps & IMapStateToProps & IP
 
   public componentDidUpdate(prevProps: any) {
     if (prevProps.classById !== this.props.classById && prevProps.classById !== {}) {
-      const { classById } = this.props;
+      const { turma, alunos } = this.props.classById;
+      console.log('this.props.classById',this.props.classById)
+      const idsAlunos = alunos.map((aluno: { id_aluno: string; }) => aluno.id_aluno)
 
       this.setState({
         editValues: {
-          idTurma: classById.id_turma,
-          nome: classById.nome,
-          idCurso: classById.curso_id_curso,
-          idUnidade: classById.unidade_id_unidade,
-          idProfessor: classById.professor_id_professor,
-          disciplina: classById.disciplina,
-          alunos: ['1']
+          idTurma: turma[0].id_turma,
+          nome: turma[0].nome,
+          idCurso: turma[0].curso_id_curso,
+          idUnidade: turma[0].unidade_id_unidade,
+          idUsuario: turma[0].professor_id_professor,
+          disciplina: turma[0].disciplina,
+          alunos: idsAlunos,
         }
       });
-      this.props.requestStudents(Number(classById.curso_id_curso));
+      this.props.requestStudents(Number(turma[0].curso_id_curso));
     }
   }
 
@@ -89,7 +91,6 @@ interface IMapDispatchToProps {
   classRegistration: (payload: any) => void;
   requestClassById: (idTurma: number | string) => void;
   classEdit: (payload: any) => void;
-
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
@@ -99,7 +100,6 @@ const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
   classRegistration: (payload) => dispatch(classRegistration.started(payload)),
   requestClassById: (idTurma: number | string) => dispatch(requestClassById.started(idTurma)),
   classEdit: (payload) => dispatch(classEdit.started(payload)),
-
 })
 
 // REDUX STATE
@@ -108,7 +108,7 @@ interface IMapStateToProps {
   units: [];
   students: Array<{ id_aluno: string, nome: string }>;
   isClassRegistration: boolean;
-  classById: IClass;
+  classById: any;
 }
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({

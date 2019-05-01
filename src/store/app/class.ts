@@ -6,17 +6,20 @@ import { reducerWithInitialState } from 'typescript-fsa-reducers/dist';
 import { Epic, Selector } from '..';
 import { apiClassEdit,
 				apiClassRegistration,
+				apiDeleteClass,
 				apiRequestClassById,
+				apiRequestClassByUserId,
 				apiRequestStudents,
-				apiRequestUnits } from '../../services/api';
+				apiRequestUnits,
+} from '../../services/api';
+import { getUser } from './state';
 
 // SELECTORS
 export const selectUnits: Selector<[]> = ({ classReducer }) => classReducer.units;
 export const selectStudents: Selector<[]> = ({ classReducer }) => classReducer.students;
 export const selectIsClassRegistration: Selector<boolean> = ({ classReducer }) => classReducer.isClassRegistration;
 export const selectClassById: Selector<IClass> = ({ classReducer }) => classReducer.classById;
-
-
+export const selectClassByUserId: Selector<IClass> = ({ classReducer }) => classReducer.classByUserId;
 
 export interface IUserSignUp {curso?
 	:string; email:string; login:string; nome: string; senha: string; tipo:string }
@@ -32,12 +35,13 @@ export interface IClass {
 
 // ACTIONS
 const actionCreator = actionCreatorFactory('APP::STATE');
+export const requestClassByUserId = actionCreator.async<any, any, any>('REQUEST_CLASS_BY_USER_ID');
 export const requestUnits = actionCreator.async<undefined, any>('REQUEST_UNIT');
 export const requestStudents = actionCreator.async<any, any, any>('REQUEST_STUDENTS');
 export const classRegistration = actionCreator.async<any, any, any>('CLASS_REGISTRATION');
 export const requestClassById = actionCreator.async<any, any, any>('REQUEST_CLASS_BY_ID');
 export const classEdit = actionCreator.async<any, any, any>('CLASS_EDIT');
-
+export const deleteClass = actionCreator.async<any, any, any>('DELETE_CLASS');
 
 
 // STATE
@@ -46,6 +50,7 @@ export interface IState {
 	students: [];
 	isClassRegistration: boolean;
 	classById: {};
+	classByUserId: {},
 }
 
 const INITIAL_STATE: IState = {
@@ -53,6 +58,7 @@ const INITIAL_STATE: IState = {
 	students: [],
 	isClassRegistration: false,
 	classById: {},
+	classByUserId: [],
 };
 
 // REDUCER
@@ -78,9 +84,46 @@ export default reducerWithInitialState(INITIAL_STATE)
 		...state,
 		classById,
 	}))
+	.case(requestClassByUserId.done, (state: IState, { result: classByUserId }) => ({
+		...state,
+		classByUserId,
+	}))
 	.build();
 
 // EFFECTS
+
+const requestClassByUserIdEpic: Epic = (action$) => action$.pipe(
+	filter(requestClassByUserId.started.match),
+	mergeMap(() => from(apiRequestClassByUserId(getUser('id_usuario'))).pipe(
+		map((classByUserId) => (requestClassByUserId.done({ result: classByUserId })),
+		catchError((error) => of(requestClassByUserId.failed({ error }))),
+	)),
+));
+
+const requestClassByUserIdEpic2: Epic = (action$) => action$.pipe(
+	filter(deleteClass.done.match),
+	mergeMap(() => from(apiRequestClassByUserId(getUser('id_usuario'))).pipe(
+		map((classByUserId) => (requestClassByUserId.done({ result: classByUserId })),
+		catchError((error) => of(requestClassByUserId.failed({ error }))),
+	)),
+));
+
+const requestClassByUserIdEpic3: Epic = (action$) => action$.pipe(
+	filter(classEdit.done.match),
+	mergeMap(() => from(apiRequestClassByUserId(getUser('id_usuario'))).pipe(
+		map((classByUserId) => (requestClassByUserId.done({ result: classByUserId })),
+		catchError((error) => of(requestClassByUserId.failed({ error }))),
+	)),
+));
+
+const requestClassByUserIdEpic4: Epic = (action$) => action$.pipe(
+	filter(classRegistration.done.match),
+	mergeMap(() => from(apiRequestClassByUserId(getUser('id_usuario'))).pipe(
+		map((classByUserId) => (requestClassByUserId.done({ result: classByUserId })),
+		catchError((error) => of(requestClassByUserId.failed({ error }))),
+	)),
+));
+
 const requestUnitsEpic: Epic = (action$) => action$.pipe(
 	filter(requestUnits.started.match),
 	mergeMap(() => from(apiRequestUnits()).pipe(
@@ -108,7 +151,7 @@ const classRegistrationEpic: Epic = (action$) => action$.pipe(
 const requestClassByIdEpic: Epic = (action$) => action$.pipe(
 	filter(requestClassById.started.match),
 	mergeMap((idTurma) => from(apiRequestClassById(idTurma.payload)).pipe(
-		map((classById) => (requestClassById.done({ result: classById.turma[0] })),
+		map((classById) => (requestClassById.done({ result: classById })),
 		catchError((error) => of(requestClassById.failed({ error }))),
 	)),
 ));
@@ -122,10 +165,23 @@ const classEditEpic: Epic = (action$) => action$.pipe(
 );
 
 
+const deleteClassEpic: Epic = (action$) => action$.pipe(
+	filter(deleteClass.started.match),
+	mergeMap((idTurma) => from(apiDeleteClass(idTurma.payload)).pipe(
+		map(({ data }) => deleteClass.done({ params: { idTurma }, result: { data }})),
+		catchError((error) => of(deleteClass.failed({ params: { idTurma }, error }))),
+	)),
+);
+
 export const epics = combineEpics(
 	requestUnitsEpic,
 	requestStudentsEpic,
 	classRegistrationEpic,
 	requestClassByIdEpic,
 	classEditEpic,
+	requestClassByUserIdEpic,
+	requestClassByUserIdEpic2,
+	requestClassByUserIdEpic3,
+	requestClassByUserIdEpic4,
+	deleteClassEpic
 );
