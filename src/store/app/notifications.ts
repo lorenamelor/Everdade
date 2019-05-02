@@ -7,6 +7,7 @@ import { css } from 'glamor';
 import { filter, mapTo, tap } from 'rxjs/operators';
 import actionCreatorFactory from 'typescript-fsa';
 import { classEdit, classRegistration, deleteClass } from './class';
+import { deleteJF } from './jf';
 import { signIn, signUp } from './state';
 
 
@@ -61,6 +62,13 @@ const deleteClassEpic: Epic = (action$) => action$.pipe(
   mapTo(showToast())
 )
 
+const deleteJFEpic: Epic = (action$) => action$.pipe(
+  filter(deleteJF.done.match),
+  tap(() => toatSuccess("Julgamento de fatos deletado!")),
+  mapTo(showToast())
+)
+
+
 
 export const epics = combineEpics(
   signUpSuccessEpic,
@@ -70,4 +78,5 @@ export const epics = combineEpics(
   classEditSuccessEpic,
   classEditErrorEpic,
   deleteClassEpic,
+  deleteJFEpic,
 );

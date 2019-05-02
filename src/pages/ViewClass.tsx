@@ -1,7 +1,6 @@
 import Btn from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import { connect } from 'react-redux';
-import { listJF } from '../assets/mock';
 
 
 import * as React from 'react';
@@ -11,47 +10,54 @@ import { IRootState } from 'src/store';
 import {
   requestClassById, selectClassById,
 } from 'src/store/app/class';
+import { deleteJF, requestJFByClassId, selectJFByClassId } from 'src/store/app/jf';
 import { selectLoginType } from 'src/store/app/state';
 import styled from 'styled-components';
 import { ExpansionPanel, H1, KeepJF, Modal, NavigationBar } from '../components';
 
 interface IState {
   open: boolean;
+  idItem: number | string;
 }
 
 interface IProps {
   match: any;
+  history: any;
 }
 
 class ViewClass extends React.PureComponent<IMapStateToProps & IMapDispatchToProps & IProps, IState> {
   public state = {
     open: false,
+    idItem: '',
   };
 
   public componentDidMount() {
-    console.log(this.props)
     const { match: { params } } = this.props;
-
     this.props.requestClassById(params.idClass);
   }
+
+  public componentWillUnmount(){
+		this.setState({open: false, idItem:''});
+	}
+
 
   public handleOpen = () => {
     this.setState({ open: true });
   };
 
   public handleClose = () => {
-    this.setState({ open: false });
+    this.setState({ open: false, idItem:'' });
   };
   public render() {
-    const { loginType, classById } = this.props;
-    console.log('classByIdview', classById)
+    const { loginType, classById, JFByClassId } = this.props;
+    console.log('JFByClassId', JFByClassId)
 
     if (!sessionStorage.getItem('userData')) { return <Redirect to="/" /> }
     return (
        <>
         {classById.turma && classById.alunos &&
          <ViewClassWrap>
-            <NavigationBar max returnUrl='/home' />
+            <NavigationBar max returnUrl={()=> this.props.history.goBack()} />
             <div>
               <H1>{classById.turma[0].nome}</H1>
               <Card className='card'>
@@ -75,9 +81,11 @@ class ViewClass extends React.PureComponent<IMapStateToProps & IMapDispatchToPro
                 <span><H1>Julgamento de Fatos</H1></span>
                 {loginType === 'professor' ? <Button onClick={this.handleOpen}>Cadastrar JF</Button> : null}
               </div>
-              <ExpansionPanel items={listJF} buttons type='jf' onClickEdit={this.handleOpen} />
+              {classById.JFs && 
+                <ExpansionPanel handleDelete={this.props.deleteJF} items={classById.JFs} buttons type='jf' onClickEdit={this.handleOpen} />
+              }
             </div>
-            <Modal openModal={this.state.open} handleClose={this.handleClose} description={<KeepJF />} width='85%' />
+            <Modal openModal={this.state.open} handleClose={this.handleClose} description={<KeepJF idClass={this.props.match.params.idClass}/>} width='85%' />
           </ViewClassWrap>
         }
       </>
@@ -88,20 +96,26 @@ class ViewClass extends React.PureComponent<IMapStateToProps & IMapDispatchToPro
 interface IMapStateToProps {
   loginType: 'professor' | 'aluno' | null;
   classById: any;
+  JFByClassId: any;
 };
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({
   loginType: selectLoginType(state),
   classById: selectClassById(state),
-
+  JFByClassId: selectJFByClassId(state),
 });
 
 interface IMapDispatchToProps {
   requestClassById: (idTurma: number | string) => void;
+  requestJFByClassId: (idTurma: number | string) => void;
+  deleteJF: (idJF: any) => void;
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
   requestClassById: (idTurma: number | string) => dispatch(requestClassById.started(idTurma)),
+  requestJFByClassId: (idTurma: number | string) => dispatch(requestJFByClassId.started(idTurma)),
+  deleteJF: (idJF) => dispatch(deleteJF.started(idJF)),
+
 })
 
 // STYLE

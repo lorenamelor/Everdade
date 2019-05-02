@@ -8,6 +8,7 @@ import {
   requestUnits, selectClassById, selectIsClassRegistration, selectStudents, selectUnits,
 } from 'src/store/app/class';
 import { requestCourses, selectCourses } from 'src/store/app/state';
+import { cursos, unidades } from '../assets/mock';
 import { H1 } from '../components'
 
 import FormKeepClass from './FormKeepClass';
@@ -31,7 +32,6 @@ class KeepJF extends React.Component<IMapDispatchToProps & IMapStateToProps & IP
   public componentDidUpdate(prevProps: any) {
     if (prevProps.classById !== this.props.classById && prevProps.classById !== {}) {
       const { turma, alunos } = this.props.classById;
-      console.log('this.props.classById',this.props.classById)
       const idsAlunos = alunos.map((aluno: { id_aluno: string; }) => aluno.id_aluno)
 
       this.setState({
@@ -67,7 +67,7 @@ class KeepJF extends React.Component<IMapDispatchToProps & IMapStateToProps & IP
 
     return (
       <>
-        <H1>Cadastrar Turma</H1>
+        <H1>{idItem !=='' ? 'Editar' : 'Cadastrar' } Turma</H1>
         <FormKeepClass
           idClass={idItem}
           classRegistration={this.props.classRegistration}
@@ -76,7 +76,9 @@ class KeepJF extends React.Component<IMapDispatchToProps & IMapStateToProps & IP
           closeModal={closeModal}
           isClassRegistration={isClassRegistration}
           editValues={editValues}
-          students={students} />
+          students={students}
+          courses={cursos}
+          units={unidades} />
       </>
     );
   }

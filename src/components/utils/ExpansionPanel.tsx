@@ -17,6 +17,7 @@ interface IProps {
   items: any;
   type: string;
   onClickEdit?: () => void;
+  handleDelete?: any;
 }
 
 class ExpansionPanels extends React.Component<IProps & IMapStateToProps> {
@@ -30,7 +31,7 @@ class ExpansionPanels extends React.Component<IProps & IMapStateToProps> {
   
   public render() {
     const { expanded } = this.state;
-    const { buttons, type, items, loginType, onClickEdit } = this.props;
+    const { buttons, type, items, loginType, onClickEdit, handleDelete } = this.props;
 
     return (
       <div>
@@ -42,7 +43,7 @@ class ExpansionPanels extends React.Component<IProps & IMapStateToProps> {
           else {
             
             return (
-              <ExpansionPanelWrap key={item.cod} expanded={expanded === item.cod} onChange={this.handleChange(item.cod)}>
+              <ExpansionPanelWrap key={item.id_jf} expanded={expanded === item.id_jf} onChange={this.handleChange(item.id_jf)}>
                 <ExpansionPanelSummary className='summary' expandIcon={<ExpandMoreIcon />}>
                   <p>
                     {type === 'jf'
@@ -50,9 +51,9 @@ class ExpansionPanels extends React.Component<IProps & IMapStateToProps> {
                         <Highlighter color={this.handleColorHighlight(item.status!)} />
                       </Tooltip>
                       : null}
-                    {item.name}
+                    {item.nome}
                   </p>
-                  {buttons ? <ActionsButtons viewUrl='/jf' onClickEdit={onClickEdit} openModal={()=> ({})} idItem={1} handleIdItem={this.handleIdItem} handleDelete={()=> ({})} /> : null}
+                  {buttons ? <ActionsButtons viewUrl='/jf' onClickEdit={onClickEdit} openModal={()=> ({})} idItem={item.id_jf} handleIdItem={this.handleIdItem} handleDelete={handleDelete} /> : null}
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                   {this.handleInfo(type, item)}
@@ -88,11 +89,11 @@ class ExpansionPanels extends React.Component<IProps & IMapStateToProps> {
     switch (status) {
       case 'Finalizado':
         return '#DB4437'
-      case 'Em execução':
+      case 'Em execucao':
         return '#0F9D58'
-      case 'Em criação':
+      case 'Em criacao':
         return '#00BBD3'
-      case 'Em preparação':
+      case 'Em preparacao':
         return '#FFCD40'
       default:
         return undefined;

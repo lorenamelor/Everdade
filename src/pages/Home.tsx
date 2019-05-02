@@ -4,9 +4,8 @@ import { Redirect } from 'react-router';
 import { Dispatch } from 'redux';
 import { IRootState } from 'src/store';
 import { deleteClass, requestClassByUserId, selectClassByUserId } from 'src/store/app/class';
-import { getUser, selectSignInSuccess } from 'src/store/app/state';
+import { getUser, selectLoginType, selectSignInSuccess } from 'src/store/app/state';
 import styled from 'styled-components';
-// import { listItems } from '../assets/mock'
 import { Button, ClassList, H1, KeepClass, Modal, NavigationBar } from '../components';
 
 // tslint:disable-next-line:no-empty-interface
@@ -56,10 +55,9 @@ class Home extends React.PureComponent<IProps & IMapStateToProps & IMapDispatchT
 	}
 
 	public render() {
-		const { classByUserId } = this.props;
+		const { classByUserId, loginType } = this.props;
 		const brainBackground = require("../assets/img/brain-background.jpg");
 		const logo = require("../assets/img/logo.png")
-		console.log('clasbyuser', this.props.classByUserId)
 		if (!sessionStorage.getItem('userData')) { return <Redirect to="/" /> }
 		return (
 			<HomeWrap brainBackground={brainBackground}>
@@ -72,7 +70,7 @@ class Home extends React.PureComponent<IProps & IMapStateToProps & IMapDispatchT
 					<div>
 						<div id='header'>
 							<H1>Turmas</H1>
-							<Button handleClick={this.handleOpen}>CADASTRAR TURMA</Button>
+							{loginType === 'professor' ? <Button handleClick={this.handleOpen}>CADASTRAR TURMA</Button> : null }
 						</div>
 							{classByUserId.length > 0 
 							?<ClassList 
@@ -161,23 +159,25 @@ const NotFound = styled.p`
 
 interface IMapDispatchToProps {
 	requestClassByUserId: (userId: number | string) => void;
-	deleteClass:(idTurema: number | string) => void;
+	deleteClass:(idTurma: number | string) => void;
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
 	requestClassByUserId: (userId: number | string) => dispatch(requestClassByUserId.started(userId)),
-	deleteClass: (userId: number | string) => dispatch(deleteClass.started(userId)),
+	deleteClass: (idTurma: number | string) => dispatch(deleteClass.started(idTurma)),
 })
 
 // REDUX STATE
 interface IMapStateToProps {
 	signInSuccess: boolean;
 	classByUserId: any,
+	loginType: any,
 };
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({
 	signInSuccess: selectSignInSuccess(state),
 	classByUserId: selectClassByUserId(state),
+	loginType: selectLoginType(state),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

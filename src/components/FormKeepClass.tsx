@@ -11,8 +11,6 @@ import styled from 'styled-components';
 import * as Yup from 'yup';
 import { Button } from '../components'
 
-import { unidades } from '../assets/mock'
-
 // validate form
 const SignupSchema = Yup.object().shape({
   nome: Yup.string().required("Nome é obrigatório"),
@@ -40,16 +38,15 @@ const FormKeepClass = (props: any) => {
      requestStudents,
      closeModal,
      classEdit,
-      // courses,
-      // units,
+      courses,
+      units,
       students,
      } = props;
  
 
     // @TODO remove mock
-    const courses = [{ nome: 'SI', id_curso: '1' }, { nome: 'ADS', id_curso: '2' }];
+    // const courses = [{ nome: 'SI', id_curso: '1' }, { nome: 'ADS', id_curso: '2' }];
     
-
     return (
       <Wrap>
         <Formik
@@ -134,11 +131,11 @@ const FormKeepClass = (props: any) => {
                       error={touched.idUnidade && Boolean(errors.idUnidade)}
                       onChange={change.bind(null, "idUnidade")}
                     >
-                      {unidades.map((unidade, index) => (
-                        <MenuItem key={index.toString()} value={unidade.id_unidade}>
+                      {units.map((unidade: any, index: any) => {
+                        return (<MenuItem key={index.toString()} value={unidade.id_unidade}>
                           {unidade.nome}
-                        </MenuItem>
-                      ))}
+                        </MenuItem>);
+                      })}
                     </TextField>
 
                     <FormControl className='input-large'

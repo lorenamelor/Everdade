@@ -51,6 +51,7 @@ export interface IState {
 	isClassRegistration: boolean;
 	classById: {};
 	classByUserId: {},
+	currentIdClass: any,
 }
 
 const INITIAL_STATE: IState = {
@@ -59,6 +60,7 @@ const INITIAL_STATE: IState = {
 	isClassRegistration: false,
 	classById: {},
 	classByUserId: [],
+	currentIdClass: null,
 };
 
 // REDUCER
@@ -76,9 +78,10 @@ export default reducerWithInitialState(INITIAL_STATE)
 		classRegistration.failed,
 		classEdit.started, 
 		classEdit.done, 
-		classEdit.failed], (state: IState) => ({
+		classEdit.failed], (state: IState,  { params: { idTurma } }) => ({
 		...state,
 		isClassRegistration: !state.isClassRegistration,
+		currentIdClass: idTurma,
 	}))
 	.case(requestClassById.done, (state: IState, { result: classById }) => ({
 		...state,

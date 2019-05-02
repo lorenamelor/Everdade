@@ -34,15 +34,14 @@ class InfoJS extends React.PureComponent<IProps & IMapStateToProps, IState> {
       <Details>
         <div>
           <p>Status: <span> {item.status}</span></p>
-          <p>Turma: <span> {item.turma}</span></p>
         </div>
         <div>
-          <p>Tempo de exibição dos fatos: <span> {item.time}min</span></p>
-          <p>Membros por equipe: <span> {item.membros}</span></p>
+          <p>Tempo de exibição dos fatos: <span> {item.tempo_max_exib}min</span></p>
         </div>
         <div>
-          <p>Qtd de fatos: <span> {item.qtdFatos}</span></p>
-          <p>Qtd de equipes: <span> {item.qtdEquipes}</span></p>
+        <p>Membros por equipe: <span> {item.membros}</span></p>
+          {/* <p>Qtd de fatos: <span> {item.qtdFatos}</span></p>
+          <p>Qtd de equipes: <span> {item.qtdEquipes}</span></p> */}
         </div>
         <div>
           {item.status === 'Em execução' && loginType !== 'professor'
@@ -78,6 +77,7 @@ const Details = styled.div`
       color: #636363;
         span{
           color: #A6A6A6;
+          margin-left: 3px;
         }
       }
       :last-child{

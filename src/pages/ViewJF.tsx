@@ -4,16 +4,28 @@ import { connect } from 'react-redux';
 
 import * as React from 'react';
 import { Redirect } from 'react-router';
+import { Dispatch } from 'redux';
 import { IRootState } from 'src/store';
+import { requestJFById, selectJFById } from 'src/store/app/jf';
 import { selectLoginType } from 'src/store/app/state';
 import styled from 'styled-components';
-import { listFacts, listJF, listTeam } from '../assets/mock'
-import { Button, CreateTeam, ExpansionPanel, H1, InfoJF, Modal, NavigationBar, Topics } from '../components';
+import { listFacts } from '../assets/mock'
+import { /*Button, Topics,*/
+   CreateTeam, ExpansionPanel, H1, InfoJF, Modal, NavigationBar } from '../components';
 
-class ViewJF extends React.PureComponent<IMapStateToProps> {
+interface IProps {
+  match: any;
+  history: any;
+}
+class ViewJF extends React.PureComponent<IMapStateToProps & IMapDispatchToProps & IProps> {
   public state = {
     open: false,
   };
+
+  public componentDidMount(){
+    const { match: { params } } = this.props;
+    this.props.requestJFById(params.idJF);
+  }
 
   public handleOpen = () => {
     this.setState({ open: true });
@@ -23,17 +35,20 @@ class ViewJF extends React.PureComponent<IMapStateToProps> {
     this.setState({ open: false });
   };
   public render() {
+    console.log('JFById', this.props.JFById)
 
-    const { loginType } = this.props;
+    const { /*loginType,*/ JFById } = this.props;
     if (!sessionStorage.getItem('userData')) { return <Redirect to="/" /> }
     return (
       <ViewJFWrap>
-        <NavigationBar max returnUrl='/turma' />
+        <NavigationBar max returnUrl={()=> this.props.history.goBack()} />
         <div>
-          <H1>Julgamento de fatos sobre casos de uso</H1>
-          <Card className='card'><InfoJF item={listJF[0]} /></Card>
+        { JFById[0] &&
+        <>
+          <H1>{JFById[0].nome}</H1>
+          <Card className='card'><InfoJF item={JFById[0]} /></Card>
           <div className='body'>
-            <div>
+            {/* <div>
               {loginType === 'professor' ?
                 <>
                   <div id='header'>
@@ -52,12 +67,14 @@ class ViewJF extends React.PureComponent<IMapStateToProps> {
                   <Topics />
                 </>
               }
-            </div>
+            </div> */}
             <div>
               <H1>Fatos</H1>
               <ExpansionPanel type='fact' items={listFacts} />
             </div>
           </div>
+          </>
+         }
         </div>
         <Modal openModal={this.state.open} handleClose={this.handleClose} description={<CreateTeam />} width='50%' />
       </ViewJFWrap >
@@ -67,11 +84,22 @@ class ViewJF extends React.PureComponent<IMapStateToProps> {
 
 interface IMapStateToProps {
   loginType: 'professor' | 'aluno' | null;
+  JFById: any;
 };
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({
   loginType: selectLoginType(state),
+  JFById: selectJFById(state),
 });
+
+
+interface IMapDispatchToProps {
+  requestJFById: (idJf: number | string) => void;
+}
+
+const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
+  requestJFById: (idJf: number | string) => dispatch(requestJFById.started(idJf)),
+})
 
 // STYLE
 const ViewJFWrap = styled.div`
@@ -105,4 +133,4 @@ const ViewJFWrap = styled.div`
   }
 `;
 
-export default connect(mapStateToProps)(ViewJF);
+export default connect(mapStateToProps, mapDispatchToProps)(ViewJF);

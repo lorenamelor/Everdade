@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 interface IProps {
 	max?: boolean;
-	returnUrl?: string;
+	returnUrl?: any;
 }
 
 class NavigationBar extends React.PureComponent<IProps & IMapDispatchToProps & IMapStateToProps> {
@@ -20,7 +20,7 @@ class NavigationBar extends React.PureComponent<IProps & IMapDispatchToProps & I
 				{max
 					?
 					<MaxNavigation>
-						<Link to={returnUrl!}><img className='return' src={require('../assets/icons/return.png')} /></Link>
+						<div onClick={returnUrl}><img className='return' src={require('../assets/icons/return.png')} /></div>
 						<Link to="/home"><img className='logo-top' src={require('../assets/img/logo-top.png')} /></Link>
 						<div>
 							<img src={require('../assets/icons/user-icon.png')} />

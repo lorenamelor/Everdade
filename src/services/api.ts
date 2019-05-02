@@ -56,3 +56,25 @@ export async function apiJFRegistration(payload: any): Promise<{ data: { msg: an
 	console.log('cadastro de jf', payload)
 	return axios.post(`http://localhost/everdade/index.php/jf/cadastrar`, { ...payload} , { headers });
 }
+
+export async function apiJFEdit(payload: any): Promise<{ data: { msg: any } }>  {
+	console.log('editar de jf', payload)
+
+	const headers: any = {};
+	return axios.put(`http://localhost/everdade/index.php/jf/editar`, { ...payload} , { headers });
+}
+
+export async function apiRequestJFById(idjf: number | string): Promise<any> {
+	const JFById: any = await axios.get(`http://localhost/everdade/index.php/jf/selecionar?idJf=${idjf}`);
+	console.log('JFById api', JFById)
+	return JFById.data;
+}
+
+export async function apiRequestJFByClassId(classId: number | string): Promise<any> {
+	const JFByClassId: any = await axios.get(`http://localhost/everdade/index.php/jf?idTurma=${classId}`);
+	return JFByClassId.data;
+}
+
+export async function apiDeleteJF(idJF: number | string): Promise<any> {
+	return axios.delete(`http://localhost/everdade/index.php/jf/apagar?idJf=${idJF}`);
+}
