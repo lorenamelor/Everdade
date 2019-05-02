@@ -36,28 +36,32 @@ class ViewClass extends React.PureComponent<IMapStateToProps & IMapDispatchToPro
     this.props.requestClassById(params.idClass);
   }
 
-  public componentWillUnmount(){
-		this.setState({open: false, idItem:''});
-	}
-
+  public componentWillUnmount() {
+    this.setState({ open: false, idItem: '' });
+  }
 
   public handleOpen = () => {
     this.setState({ open: true });
   };
 
   public handleClose = () => {
-    this.setState({ open: false, idItem:'' });
+    this.setState({ open: false, idItem: '' });
   };
+
+  public handleIdItem = (idItem: number | string) => {
+		this.setState({ idItem });
+  };
+  
   public render() {
     const { loginType, classById, JFByClassId } = this.props;
-    console.log('JFByClassId', JFByClassId)
+    console.log('JFByClassId', JFByClassId, 'idItem', this.state.idItem)
 
     if (!sessionStorage.getItem('userData')) { return <Redirect to="/" /> }
     return (
-       <>
+      <>
         {classById.turma && classById.alunos &&
-         <ViewClassWrap>
-            <NavigationBar max returnUrl={()=> this.props.history.goBack()} />
+          <ViewClassWrap>
+            <NavigationBar max returnUrl={() => this.props.history.goBack()} />
             <div>
               <H1>{classById.turma[0].nome}</H1>
               <Card className='card'>
@@ -67,25 +71,24 @@ class ViewClass extends React.PureComponent<IMapStateToProps & IMapDispatchToPro
                   <p>Curso: <span>{classById.turma[0].curso}</span></p>
                 </div>
                 <div>
-                  <p>Alunos:
-                <ul>
-                      {classById.alunos.map((aluno: { id_aluno: string | number | undefined; nome: string; }) => {
-                        return <li key={aluno.id_aluno}>{aluno.nome}</li>;
-                      }
-                      )}
-                    </ul>
-                  </p>
+                  <p>Alunos:</p>
+                  <ul>
+                    {classById.alunos.map((aluno: { id_aluno: string | number | undefined; nome: string; }) => {
+                      return <li key={aluno.id_aluno}>{aluno.nome}</li>;
+                    }
+                    )}
+                  </ul>
                 </div>
               </Card>
               <div className='title-jf'>
                 <span><H1>Julgamento de Fatos</H1></span>
                 {loginType === 'professor' ? <Button onClick={this.handleOpen}>Cadastrar JF</Button> : null}
               </div>
-              {classById.JFs && 
-                <ExpansionPanel handleDelete={this.props.deleteJF} items={classById.JFs} buttons type='jf' onClickEdit={this.handleOpen} />
+              {classById.JFs &&
+                <ExpansionPanel handleDelete={this.props.deleteJF} items={classById.JFs} buttons type='jf' onClickEdit={this.handleOpen} 	handleIdItem={this.handleIdItem} />
               }
             </div>
-            <Modal openModal={this.state.open} handleClose={this.handleClose} description={<KeepJF idClass={this.props.match.params.idClass}/>} width='85%' />
+            <Modal openModal={this.state.open} handleClose={this.handleClose} description={<KeepJF closeModal={this.handleClose} idClass={this.props.match.params.idClass} idItem={this.state.idItem}/>} width='85%' />
           </ViewClassWrap>
         }
       </>
@@ -141,6 +144,9 @@ const ViewClassWrap = styled.div`
           color: #A6A6A6;
         }
       }
+      ul{
+          color: #A6A6A6;
+        }
       div{
         flex-grow: 2;
       }

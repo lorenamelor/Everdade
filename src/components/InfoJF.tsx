@@ -39,7 +39,7 @@ class InfoJS extends React.PureComponent<IProps & IMapStateToProps, IState> {
           <p>Tempo de exibição dos fatos: <span> {item.tempo_max_exib}min</span></p>
         </div>
         <div>
-        <p>Membros por equipe: <span> {item.membros}</span></p>
+        <p>Membros por equipe: <span> {item.quantidade_alunos_equipe}</span></p>
           {/* <p>Qtd de fatos: <span> {item.qtdFatos}</span></p>
           <p>Qtd de equipes: <span> {item.qtdEquipes}</span></p> */}
         </div>

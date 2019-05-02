@@ -12,6 +12,7 @@ import { apiClassEdit,
 				apiRequestStudents,
 				apiRequestUnits,
 } from '../../services/api';
+import { deleteJF, JFRegistration } from './jf';
 import { getUser } from './state';
 
 // SELECTORS
@@ -78,14 +79,14 @@ export default reducerWithInitialState(INITIAL_STATE)
 		classRegistration.failed,
 		classEdit.started, 
 		classEdit.done, 
-		classEdit.failed], (state: IState,  { params: { idTurma } }) => ({
+		classEdit.failed], (state: IState) => ({
 		...state,
 		isClassRegistration: !state.isClassRegistration,
-		currentIdClass: idTurma,
 	}))
-	.case(requestClassById.done, (state: IState, { result: classById }) => ({
+	.case(requestClassById.done, (state: IState, { params: idTurma, result: classById }) => ({
 		...state,
 		classById,
+		currentIdClass: idTurma.payload,
 	}))
 	.case(requestClassByUserId.done, (state: IState, { result: classByUserId }) => ({
 		...state,
@@ -154,10 +155,27 @@ const classRegistrationEpic: Epic = (action$) => action$.pipe(
 const requestClassByIdEpic: Epic = (action$) => action$.pipe(
 	filter(requestClassById.started.match),
 	mergeMap((idTurma) => from(apiRequestClassById(idTurma.payload)).pipe(
-		map((classById) => (requestClassById.done({ result: classById })),
+		map((classById) => (requestClassById.done({ params: idTurma , result: classById })),
 		catchError((error) => of(requestClassById.failed({ error }))),
 	)),
 ));
+
+const requestClassByIdEpic2: Epic = (action$, state$) => action$.pipe(
+	filter(JFRegistration.done.match),
+	mergeMap(() => from(apiRequestClassById(state$.value.classReducer.currentIdClass)).pipe(
+		map((classById) => (requestClassById.done({ params: {idTurma: { payload: state$.value.classReducer.currentIdClass}}  , result: classById })),
+		catchError((error) => of(requestClassById.failed({ error }))),
+	)),
+));
+
+const requestClassByIdEpic3: Epic = (action$, state$) => action$.pipe(
+	filter(deleteJF.done.match),
+	mergeMap(() => from(apiRequestClassById(state$.value.classReducer.currentIdClass)).pipe(
+		map((classById) => (requestClassById.done({ params: {idTurma: { payload: state$.value.classReducer.currentIdClass}}  , result: classById })),
+		catchError((error) => of(requestClassById.failed({ error }))),
+	)),
+));
+
 
 const classEditEpic: Epic = (action$) => action$.pipe(
 	filter(classEdit.started.match),
@@ -186,5 +204,7 @@ export const epics = combineEpics(
 	requestClassByUserIdEpic2,
 	requestClassByUserIdEpic3,
 	requestClassByUserIdEpic4,
-	deleteClassEpic
+	deleteClassEpic,
+	requestClassByIdEpic2,
+	requestClassByIdEpic3,
 );

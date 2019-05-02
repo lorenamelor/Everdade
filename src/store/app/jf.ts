@@ -7,7 +7,6 @@ import { Epic, Selector } from '..';
 import { apiDeleteJF,
 				apiJFEdit,
 				apiJFRegistration,
-				apiRequestJFByClassId,
 				apiRequestJFById,
 } from '../../services/api';
 // import { getUser } from './state';
@@ -31,11 +30,11 @@ export interface IClass {
 
 // ACTIONS
 const actionCreator = actionCreatorFactory('APP::STATE');
-export const requestJFByClassId = actionCreator.async<any, any, any>('REQUEST_JF_BY_CLASS_ID');
+export const requestJFByClassId = actionCreator.async<any, any, any>('REQUEST_JF_BY_JF_ID');
 export const JFRegistration = actionCreator.async<any, any, any>('JF_REGISTRATION');
 export const requestJFById = actionCreator.async<any, any, any>('REQUEST_JF_BY_ID');
 export const JFEdit = actionCreator.async<any, any, any>('JF_EDIT');
-export const deleteJF = actionCreator.async<any, any, any>('DELETE_CLASS');
+export const deleteJF = actionCreator.async<any, any, any>('DELETE_JF');
 
 
 // STATE
@@ -74,31 +73,6 @@ export default reducerWithInitialState(INITIAL_STATE)
 
 // EFFECTS
 
-const requestJFByClassIdEpic: Epic = (action$, state$) => action$.pipe(
-	filter(requestJFByClassId.started.match),
-	mergeMap(() => from(apiRequestJFByClassId(state$.value.classReducer.currentIdClass)).pipe(
-		map((JFByClassId) => (requestJFByClassId.done({ result: JFByClassId })),
-		catchError((error) => of(requestJFByClassId.failed({ error }))),
-	)),
-));
-
-const requestJFByClassIdEpic2: Epic = (action$, state$) => action$.pipe(
-	filter(deleteJF.done.match),
-	mergeMap(() => from(apiRequestJFByClassId(state$.value.classReducer.currentIdClass)).pipe(
-		map((JFByClassId) => (requestJFByClassId.done({ result: JFByClassId })),
-		catchError((error) => of(requestJFByClassId.failed({ error }))),
-	)),
-));
-
-// const requestJFByClassIdEpic3: Epic = (action$) => action$.pipe(
-// 	filter(JFEdit.done.match),
-// 	mergeMap(() => from(apiRequestJFByClassId(1)).pipe(
-// 		map((JFByClassId) => (requestJFByClassId.done({ result: JFByClassId })),
-// 		catchError((error) => of(requestJFByClassId.failed({ error }))),
-// 	)),
-// ));
-
-/************************************************** */
 const JFRegistrationEpic: Epic = (action$) => action$.pipe(
 	filter(JFRegistration.started.match),
 	mergeMap(({payload}) => from(apiJFRegistration(payload)).pipe(
@@ -123,7 +97,6 @@ const JFEditEpic: Epic = (action$) => action$.pipe(
 	)),
 );
 
-
 const deleteJFEpic: Epic = (action$) => action$.pipe(
 	filter(deleteJF.started.match),
 	mergeMap((idJF) => from(apiDeleteJF(idJF.payload)).pipe(
@@ -136,8 +109,5 @@ export const epics = combineEpics(
 	JFRegistrationEpic,
 	requestJFByIdEpic,
 	JFEditEpic,
-	requestJFByClassIdEpic,
-	requestJFByClassIdEpic2,
-	// requestJFByClassIdEpic3,
 	deleteJFEpic,
 );

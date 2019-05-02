@@ -16,8 +16,9 @@ interface IProps {
   buttons?: boolean;
   items: any;
   type: string;
-  onClickEdit?: () => void;
+  onClickEdit?: any;
   handleDelete?: any;
+  handleIdItem?: any;
 }
 
 class ExpansionPanels extends React.Component<IProps & IMapStateToProps> {
@@ -25,25 +26,21 @@ class ExpansionPanels extends React.Component<IProps & IMapStateToProps> {
     expanded: 1,
   };
 
-  public handleIdItem = (idItem: number | string) => {
-    this.setState({ idItem });
-  };
-  
   public render() {
     const { expanded } = this.state;
-    const { buttons, type, items, loginType, onClickEdit, handleDelete } = this.props;
+    const { buttons, type, items, loginType, onClickEdit, handleDelete, handleIdItem } = this.props;
 
     return (
       <div>
         
-        {map(items, (item: any) => {
-          if (type === 'jf' && loginType === 'aluno' && item.status === 'Em criação') {
+        {map(items, (item: any, index: any) => {
+          if (type === 'jf' && loginType === 'aluno' && item.status === 'Em criacao') {
             return null
           }
           else {
-            
+            const itemId = type === 'jf' ? item.id_jf : item.id_fato;
             return (
-              <ExpansionPanelWrap key={item.id_jf} expanded={expanded === item.id_jf} onChange={this.handleChange(item.id_jf)}>
+              <ExpansionPanelWrap key={itemId} expanded={expanded === itemId} onChange={this.handleChange(itemId)}>
                 <ExpansionPanelSummary className='summary' expandIcon={<ExpandMoreIcon />}>
                   <p>
                     {type === 'jf'
@@ -51,9 +48,15 @@ class ExpansionPanels extends React.Component<IProps & IMapStateToProps> {
                         <Highlighter color={this.handleColorHighlight(item.status!)} />
                       </Tooltip>
                       : null}
-                    {item.nome}
+                    { type === 'jf' ? item.nome : `Fato ${index + 1}`}
                   </p>
-                  {buttons ? <ActionsButtons viewUrl='/jf' onClickEdit={onClickEdit} openModal={()=> ({})} idItem={item.id_jf} handleIdItem={this.handleIdItem} handleDelete={handleDelete} /> : null}
+                  {buttons ? <ActionsButtons 
+                    viewUrl='/jf' 
+                    onClickEdit={onClickEdit} 
+                    openModal={onClickEdit} 
+                    idItem={item.id_jf} 
+                    handleIdItem={handleIdItem} 
+                    handleDelete={handleDelete} /> : null}
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                   {this.handleInfo(type, item)}

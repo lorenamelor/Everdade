@@ -9,7 +9,6 @@ import { IRootState } from 'src/store';
 import { requestJFById, selectJFById } from 'src/store/app/jf';
 import { selectLoginType } from 'src/store/app/state';
 import styled from 'styled-components';
-import { listFacts } from '../assets/mock'
 import { /*Button, Topics,*/
    CreateTeam, ExpansionPanel, H1, InfoJF, Modal, NavigationBar } from '../components';
 
@@ -43,10 +42,10 @@ class ViewJF extends React.PureComponent<IMapStateToProps & IMapDispatchToProps 
       <ViewJFWrap>
         <NavigationBar max returnUrl={()=> this.props.history.goBack()} />
         <div>
-        { JFById[0] &&
+        { JFById.jf && JFById.jf[0] &&
         <>
-          <H1>{JFById[0].nome}</H1>
-          <Card className='card'><InfoJF item={JFById[0]} /></Card>
+          <H1>{JFById.jf[0].nome}</H1>
+          <Card className='card'><InfoJF item={JFById.jf[0]} /></Card>
           <div className='body'>
             {/* <div>
               {loginType === 'professor' ?
@@ -70,7 +69,7 @@ class ViewJF extends React.PureComponent<IMapStateToProps & IMapDispatchToProps 
             </div> */}
             <div>
               <H1>Fatos</H1>
-              <ExpansionPanel type='fact' items={listFacts} />
+              <ExpansionPanel type='fact' items={JFById.fatos} />
             </div>
           </div>
           </>

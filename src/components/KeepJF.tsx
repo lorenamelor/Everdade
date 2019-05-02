@@ -7,7 +7,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { IRootState } from 'src/store';
-import { JFEdit, JFRegistration, selectIsJFRegistration } from 'src/store/app/jf';
+import { JFEdit, JFRegistration, requestJFById, selectIsJFRegistration, selectJFById } from 'src/store/app/jf';
 import styled from 'styled-components';
 import * as Yup from 'yup';
 import { Button, H1 } from '../components'
@@ -15,6 +15,8 @@ import { Button, H1 } from '../components'
 // tslint:disable-next-line:no-empty-interface
 interface IProps {
   idClass: number | string;
+  closeModal: any;
+  idItem?: number | string;
 }
 
 // validate form
@@ -29,7 +31,14 @@ const ValidationJFSchema = Yup.object().shape({
 
 class KeepJF extends React.Component<IProps & IMapStateToProps & IMapDispatchToProps> {
   public state = {
-    editValues: {},
+    editValues: {
+      nome: '',
+      tempoMaxExib: '',
+      status: '',
+      idTurma: this.props.idClass,
+      fatos: [{ texto: '', respostaCorreta: '', ordem: '', topico: '' }],
+      qntMaxAlunosEquipe: '',
+    },
     factsCount: 1
   }
 
@@ -47,57 +56,63 @@ class KeepJF extends React.Component<IProps & IMapStateToProps & IMapDispatchToP
     count = count + 1;
     this.setState({ factsCount: count })
   }
-  // public componentDidMount() {
+  public componentDidMount() {
 
-  //   if (this.props.idItem) {
-  //     this.props.requestClassById(this.props.idItem);
-  //   }
-  // }
+    if (this.props.idItem) {
+      this.props.requestJFById(this.props.idItem);
+    }
+  }
 
-  // public componentDidUpdate(prevProps: any) {
-  //   if (prevProps.classById !== this.props.classById && prevProps.classById !== {}) {
-  //     const { turma, alunos } = this.props.classById;
-  //     console.log('this.props.classById',this.props.classById)
-  //     const idsAlunos = alunos.map((aluno: { id_aluno: string; }) => aluno.id_aluno)
+  public componentDidUpdate(prevProps: any) {
+    if (prevProps.JFById !== this.props.JFById && prevProps.JFById !== {}) {
+      const { jf, fatos } = this.props.JFById;
+      console.log('this.props.JFById',this.props.JFById)
 
-  //     this.setState({
-  //       editValues: {
-  //         idTurma: turma[0].id_turma,
-  //         nome: turma[0].nome,
-  //         idCurso: turma[0].curso_id_curso,
-  //         idUnidade: turma[0].unidade_id_unidade,
-  //         idUsuario: turma[0].professor_id_professor,
-  //         disciplina: turma[0].disciplina,
-  //         alunos: idsAlunos,
-  //       }
-  //     });
-  //     this.props.requestStudents(Number(turma[0].curso_id_curso));
-  //   }
-  // }
+      this.setState({
+        editValues: {
+          nome: jf[0].nome,
+          tempoMaxExib: jf[0].tempo_max_exib,
+          status: jf[0].status,
+          idTurma: this.props.idClass,
+          idJF: this.props.idItem,
+          fatos,
+          qntMaxAlunosEquipe: jf[0].quantidade_alunos_equipe,
+        }
+      });
 
-  // public componentWillUnmount(){
-  //   this.setState({
-  //     editValues: {}
-  //   })
-  // }
+    }
+  }
+
+  public componentWillUnmount(){
+    this.setState({
+      editValues: {
+        nome: '',
+        tempoMaxExib: '',
+        status: '',
+        idTurma: this.props.idClass,
+        fatos: [{ texto: '', respostaCorreta: '', ordem: '', topico: '' }],
+        qntMaxAlunosEquipe: '',
+      }
+    })
+  }
 
   public render() {
-    // const { editValues } = this.state;
-    const { isJFRegistration } = this.props;
+    const { editValues } = this.state;
+    const { isJFRegistration, closeModal, JFById } = this.props;
+    console.log('JFById heep', JFById)
     const addIcon = require('../assets/icons/add-icon.png')
     const deletIcon = require('../assets/icons/delet-icon.png')
     return (
       <Wrap>
-
         <Formik
-          initialValues={this.initialValues}
+          initialValues={editValues.nome !== '' ? editValues : this.initialValues}
           enableReinitialize
           validationSchema={ValidationJFSchema}
           onSubmit={values => {
             // idClass !== ''
             //   ? classEdit(values)
             this.props.JFRegistration(values)
-            // closeModal()
+            closeModal();
           }}
         >
           {({ errors, touched, values: { nome, tempoMaxExib, qntMaxAlunosEquipe, status, fatos },
@@ -138,7 +153,7 @@ class KeepJF extends React.Component<IProps & IMapStateToProps & IMapDispatchToP
                       error={touched.status && Boolean(errors.status)}
                       onChange={change.bind(null, "status")}
                     >
-                      {['Em criacao', 'Em preparacao', 'Em execucaoo', 'Finalizado'].map(option => (
+                      {['Em criacao', 'Em preparacao', 'Em execucao', 'Finalizado'].map(option => (
                         <MenuItem key={option} value={option}>
                           {option}
                         </MenuItem>
@@ -191,13 +206,13 @@ class KeepJF extends React.Component<IProps & IMapStateToProps & IMapDispatchToP
                                     className='inputMultiline'
                                     margin="normal"
                                     variant="outlined"
-                                    helperText={touched.fatos && fatos[index].texto === "" ? 'O fato é obrigatório' : ''}
-                                    error={touched.fatos && fatos[index].texto === ""}
+                                    // helperText={touched.fatos && fatos[index].texto === "" ? 'O fato é obrigatório' : ''}
+                                    // error={touched.fatos && fatos[index].texto === ""}
                                     name={`fatos[${index}].texto`}
                                     value={fatos[index].texto}
                                     onChange={change.bind(null, `fatos[${index}].texto`)}
                                     inputProps={{
-                                      maxLength: 500,
+                                      maxLength: 400,
                                     }}
                                   />
                                   <div>
@@ -210,8 +225,8 @@ class KeepJF extends React.Component<IProps & IMapStateToProps & IMapDispatchToP
                                       margin="normal"
                                       name={`fatos[${index}].respostaCorreta`}
                                       value={fatos[index].respostaCorreta}
-                                      helperText={touched.fatos && fatos[index].respostaCorreta === "" ? 'A resposta é obrigatória' : ''}
-                                      error={touched.fatos && fatos[index].respostaCorreta === ""}
+                                      // helperText={touched.fatos && fatos[index].respostaCorreta === "" ? 'A resposta é obrigatória' : ''}
+                                      // error={touched.fatos && fatos[index].respostaCorreta === ""}
                                       onChange={change.bind(null, `fatos[${index}].respostaCorreta`)}
                                     >
                                       {[{ label: 'Verdadeiro', value: 'v' }, { label: 'Falso', value: 'f' }].map(option => (
@@ -229,8 +244,8 @@ class KeepJF extends React.Component<IProps & IMapStateToProps & IMapDispatchToP
                                       type="number"
                                       name={`fatos[${index}].ordem`}
                                       value={fatos[index].ordem}
-                                      helperText={touched.fatos && fatos[index].ordem === "" ? 'A ordem é obrigatória' : ''}
-                                      error={touched.fatos && fatos[index].ordem === ""}
+                                      // helperText={touched.fatos && fatos[index].ordem === "" ? 'A ordem é obrigatória' : ''}
+                                      // error={touched.fatos && fatos[index].ordem === ""}
                                       onChange={change.bind(null, `fatos[${index}].ordem`)}
                                     />
                                     </div>
@@ -242,8 +257,8 @@ class KeepJF extends React.Component<IProps & IMapStateToProps & IMapDispatchToP
                                       type="text"
                                       name={`fatos[${index}].topico`}
                                       value={fatos[index].topico}
-                                      helperText={touched.fatos && fatos[index].topico === "" ? 'O topico é obrigatória' : ''}
-                                      error={touched.fatos && fatos[index].topico === ""}
+                                      // helperText={touched.fatos && fatos[index].topico === "" ? 'O topico é obrigatória' : ''}
+                                      // error={touched.fatos && fatos[index].topico === ""}
                                       onChange={change.bind(null, `fatos[${index}].topico`)}
                                       inputProps={{
                                         maxLength: 80,
@@ -384,22 +399,25 @@ const ButtomContainer = styled.div`
 interface IMapDispatchToProps {
   JFRegistration: (payload: any) => void;
   JFEdit: (payload: any) => void;
+  requestJFById: (idJF: any) => void;
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
   JFRegistration: (payload) => dispatch(JFRegistration.started(payload)),
   JFEdit: (payload) => dispatch(JFEdit.started(payload)),
+  requestJFById: (idJF) => dispatch(requestJFById.started(idJF)),
+
 })
 
 // REDUX STATE
 interface IMapStateToProps {
   isJFRegistration: boolean;
-  // classById: any;
+  JFById: any;
 }
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({
   isJFRegistration: selectIsJFRegistration(state),
-  // classById: selectClassById(state),
+  JFById: selectJFById(state),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(KeepJF);

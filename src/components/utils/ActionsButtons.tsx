@@ -22,6 +22,7 @@ class ActionsButtons extends React.Component<Iprops & IMapStateToProps> {
 
   public handleEdit = (props: Iprops) => () => {
     props.openModal();
+    console.log('props.idItem', props.idItem)
     props.handleIdItem(props.idItem);
   }
     
@@ -29,7 +30,6 @@ class ActionsButtons extends React.Component<Iprops & IMapStateToProps> {
   const viewIcon = require('../../assets/icons/view-icon.png');
   const editIcon = require('../../assets/icons/edit-icon.png');
   const deletIcon = require('../../assets/icons/delet-icon.png');
-    console.log('ACTION BUTTONS', this.props)
    return (
     <span>
       <Link to={`${this.props.viewUrl}/${this.props.idItem}`}>

@@ -15,15 +15,17 @@ const InfoJS: React.SFC<IProps & IMapStateToProps> = ({ item, loginType }) => {
   const hits = require('../assets/icons/hits-icon.png')
 
   return (
-    <Details answer={item.resposta} teamAnswer={item.respostaEquipe}>
+    <Details answer={item.resposta_correta} teamAnswer={item.respostaEquipe}>
       <div>
-        <p>Tópico: <span>{item.topic}</span></p>
-        <p>Resposta: <span className='answer'>{item.resposta ? 'V' : 'F'}</span></p>
-        {loginType !== 'professor' ?
-          <p>Resposta da equipe: <span className='teamAnswer'>{item.respostaEquipe ? 'V' : 'F'}</span></p>
-          : null}
+        <p>Tópico: <span>{item.topico}</span></p>
+        {loginType === 'professor' 
+          ? <p>Resposta: <span className='answer'>{item.resposta_correta === 'v' ? 'Verdadeiro' : 'Falso'}</span></p>
+          : <p>Resposta da equipe: <span className='teamAnswer'>{item.respostaEquipe ? 'V' : 'F'}</span></p>
+        }
       </div>
-      <p className='fact'>{item.fact}</p>
+      {(loginType === 'professor' || item.status === 'Finalizado') &&
+      <p className='fact'>{item.texto_fato}</p>
+      }
       {loginType === 'professor' ?
         <>
         <hr />
@@ -32,7 +34,9 @@ const InfoJS: React.SFC<IProps & IMapStateToProps> = ({ item, loginType }) => {
             <div><img src={hits} /><p>Acertos: <span>{item.acertos}</span></p></div>
             <div><img src={mistakes} /><p>Erros: <span>{item.erros}</span></p></div>
           </div>
-          <QuickList text='VER EQUIPE' list={item.equipes} />
+          {loginType !== 'professor' &&
+            <QuickList text='VER EQUIPE' list={item.equipes} />
+          }
         </div>
         </>
         : null}
@@ -72,6 +76,7 @@ const Details = styled.div`
     text-align: justify;
       >span{
         color: #A6A6A6;
+        margin-left: 5px;
       }
     }
     hr{
@@ -80,13 +85,13 @@ const Details = styled.div`
       list-style-type: none;
     }
     .answer{
-      color: ${(props: any) => props.answer ? '#009688' : '#DB4437'}
+      color: ${(props: any) => props.answer === 'v' ? '#009688' : '#DB4437'}
     }
     .teamAnswer{
-      color: ${(props: any) => props.teamAnswer ? '#009688' : '#DB4437'}
+      color: ${(props: any) => props.teamAnswer === 'v' ? '#009688' : '#DB4437'}
     }
     .fact{
-      padding-top: 10px;
+      /* padding-top: 10px; */
       margin-right: 0;
     }
     .footer{
