@@ -22,7 +22,6 @@ class ActionsButtons extends React.Component<Iprops & IMapStateToProps> {
 
   public handleEdit = (props: Iprops) => () => {
     props.openModal();
-    console.log('props.idItem', props.idItem)
     props.handleIdItem(props.idItem);
   }
     

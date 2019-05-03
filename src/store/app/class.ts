@@ -12,7 +12,7 @@ import { apiClassEdit,
 				apiRequestStudents,
 				apiRequestUnits,
 } from '../../services/api';
-import { deleteJF, JFRegistration } from './jf';
+import { deleteJF, JFEdit, JFRegistration } from './jf';
 import { getUser } from './state';
 
 // SELECTORS
@@ -176,6 +176,13 @@ const requestClassByIdEpic3: Epic = (action$, state$) => action$.pipe(
 	)),
 ));
 
+const requestClassByIdEpic4: Epic = (action$, state$) => action$.pipe(
+	filter(JFEdit.done.match),
+	mergeMap(() => from(apiRequestClassById(state$.value.classReducer.currentIdClass)).pipe(
+		map((classById) => (requestClassById.done({ params: {idTurma: { payload: state$.value.classReducer.currentIdClass}}  , result: classById })),
+		catchError((error) => of(requestClassById.failed({ error }))),
+	)),
+));
 
 const classEditEpic: Epic = (action$) => action$.pipe(
 	filter(classEdit.started.match),
@@ -207,4 +214,5 @@ export const epics = combineEpics(
 	deleteClassEpic,
 	requestClassByIdEpic2,
 	requestClassByIdEpic3,
+	requestClassByIdEpic4,
 );

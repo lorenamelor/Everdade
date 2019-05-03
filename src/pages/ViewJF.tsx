@@ -34,8 +34,6 @@ class ViewJF extends React.PureComponent<IMapStateToProps & IMapDispatchToProps 
     this.setState({ open: false });
   };
   public render() {
-    console.log('JFById', this.props.JFById)
-
     const { /*loginType,*/ JFById } = this.props;
     if (!sessionStorage.getItem('userData')) { return <Redirect to="/" /> }
     return (

@@ -53,8 +53,7 @@ class ViewClass extends React.PureComponent<IMapStateToProps & IMapDispatchToPro
   };
   
   public render() {
-    const { loginType, classById, JFByClassId } = this.props;
-    console.log('JFByClassId', JFByClassId, 'idItem', this.state.idItem)
+    const { loginType, classById } = this.props;
 
     if (!sessionStorage.getItem('userData')) { return <Redirect to="/" /> }
     return (

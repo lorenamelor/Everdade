@@ -30,7 +30,7 @@ class NavigationBar extends React.PureComponent<IProps & IMapDispatchToProps & I
 					:
 					<MinNavigation>
 						<img src={require('../assets/icons/signout-icon.png')} onClick={this.props.signOut}/>
-						<img src={require('../assets/icons/user-icon.png')} />
+						{/* <img src={require('../assets/icons/user-icon.png')} /> */}
 					</MinNavigation>
 				}
 			</div>

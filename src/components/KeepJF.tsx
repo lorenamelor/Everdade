@@ -66,7 +66,13 @@ class KeepJF extends React.Component<IProps & IMapStateToProps & IMapDispatchToP
   public componentDidUpdate(prevProps: any) {
     if (prevProps.JFById !== this.props.JFById && prevProps.JFById !== {}) {
       const { jf, fatos } = this.props.JFById;
-      console.log('this.props.JFById',this.props.JFById)
+
+      const facts = fatos.map((fato: any) => ({
+        texto: fato.texto_fato, 
+        respostaCorreta: fato.resposta_correta,
+        ordem: fato.ordem_jf, 
+        topico: fato.topico,
+      }))
 
       this.setState({
         editValues: {
@@ -74,8 +80,8 @@ class KeepJF extends React.Component<IProps & IMapStateToProps & IMapDispatchToP
           tempoMaxExib: jf[0].tempo_max_exib,
           status: jf[0].status,
           idTurma: this.props.idClass,
-          idJF: this.props.idItem,
-          fatos,
+          idJf: this.props.idItem,
+          fatos: facts,
           qntMaxAlunosEquipe: jf[0].quantidade_alunos_equipe,
         }
       });
@@ -98,8 +104,8 @@ class KeepJF extends React.Component<IProps & IMapStateToProps & IMapDispatchToP
 
   public render() {
     const { editValues } = this.state;
-    const { isJFRegistration, closeModal, JFById } = this.props;
-    console.log('JFById heep', JFById)
+    const { isJFRegistration, closeModal, idItem } = this.props;
+
     const addIcon = require('../assets/icons/add-icon.png')
     const deletIcon = require('../assets/icons/delet-icon.png')
     return (
@@ -109,9 +115,9 @@ class KeepJF extends React.Component<IProps & IMapStateToProps & IMapDispatchToP
           enableReinitialize
           validationSchema={ValidationJFSchema}
           onSubmit={values => {
-            // idClass !== ''
-            //   ? classEdit(values)
-            this.props.JFRegistration(values)
+            idItem !== ''
+              ? this.props.JFEdit(values)
+              : this.props.JFRegistration(values);
             closeModal();
           }}
         >

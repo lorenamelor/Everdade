@@ -20,14 +20,7 @@ const SignupSchema = Yup.object().shape({
   alunos: Yup.array().required("Vincular alunos é orbigatário")
 });
 
-const initialValues= {
-  nome: '',
-  idCurso: '',
-  idUnidade: '',
-  idUsuario: getUser('id_usuario'),
-  disciplina: '',
-  alunos: [],
-}
+
 
 const FormKeepClass = (props: any) => {
    const {
@@ -43,6 +36,14 @@ const FormKeepClass = (props: any) => {
       students,
      } = props;
  
+     const initialValues= {
+      nome: '',
+      idCurso: '',
+      idUnidade: '',
+      idUsuario: getUser('id_usuario'),
+      disciplina: '',
+      alunos: [],
+    }
 
     // @TODO remove mock
     // const courses = [{ nome: 'SI', id_curso: '1' }, { nome: 'ADS', id_curso: '2' }];

@@ -147,6 +147,7 @@ const signOutEpic: Epic = (action$) => action$.pipe(
   filter(signOut.started.match),
   tap(() => {
 		sessionStorage.removeItem('userData');
+		// window.location.reload();
   }),
   mapTo(signOut.done({})),
 );
