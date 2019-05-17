@@ -38,7 +38,7 @@ class ExpansionPanels extends React.Component<IProps & IMapStateToProps> {
             return null
           }
           else {
-            const itemId = type === 'jf' ? item.id_jf : item.id_fato;
+            const itemId = type === 'jf' ? item.id_jf : (type === 'fact' ? item.id_fato : item.id);
             return (
               <ExpansionPanelWrap key={itemId} expanded={expanded === itemId} onChange={this.handleChange(itemId)}>
                 <ExpansionPanelSummary className='summary' expandIcon={<ExpandMoreIcon />}>
@@ -48,7 +48,7 @@ class ExpansionPanels extends React.Component<IProps & IMapStateToProps> {
                         <Highlighter color={this.handleColorHighlight(item.status!)} />
                       </Tooltip>
                       : null}
-                    { type === 'jf' ? item.nome : `Fato ${index + 1}`}
+                    { type === 'jf' || type === 'team' ? item.nome : `Fato ${index + 1}`}
                   </p>
                   {buttons ? <ActionsButtons 
                     viewUrl='/jf' 

@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 
 import classReducer, { epics as classEpics} from './app/class';
 import jfReducer, { epics as jfEpics} from './app/jf';
+import teamReducer, {epics as teamEpics} from './app/team';
 
 import { epics as notificationsEpics } from './app/notifications';
 import appStateReducer, { epics as appStateEpics, init, IState as IAppStateState } from './app/state';
@@ -20,6 +21,7 @@ export interface IRootState {
 	appState: IAppStateState,
 	classReducer: any,
 	jfReducer: any,
+	teamReducer: any,
 }
 
 /* *************************** */
@@ -30,6 +32,7 @@ const rootReducer = combineReducers({
 	appState: appStateReducer,
 	classReducer,
 	jfReducer,
+	teamReducer,
 });
 
 /* ************************** */
@@ -41,6 +44,7 @@ const rootEpic = combineEpics(
 	notificationsEpics,
 	classEpics,
 	jfEpics,
+	teamEpics,
 );
 
 /* ************************** */

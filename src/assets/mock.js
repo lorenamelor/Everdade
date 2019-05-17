@@ -21,10 +21,10 @@ export const listFacts = [
 ]
 
 export const listTeam = [
-  { cod: 1, name: 'Equipe A', qtdMembros: 5, lider: 'João Mendes', acertos: 20, erros: 10, acertosNominais: 10, acertosReais: 15, membros: ['Maria Clara', 'João Antonio', 'Eleonora de Melo', 'Pedro Quiroz', 'José Eustáquio'] },
-  { cod: 2, name: 'Equipe B', qtdMembros: 5, lider: 'João Mendes', acertos: 20, erros: 10, acertosNominais: 10, acertosReais: 15, membros: ['Maria Clara', 'João Antonio', 'Eleonora de Melo', 'Pedro Quiroz', 'José Eustáquio'] },
-  { cod: 3, name: 'Equipe C', qtdMembros: 5, lider: 'João Mendes', acertos: 20, erros: 10, acertosNominais: 10, acertosReais: 15, membros: ['Maria Clara', 'João Antonio', 'Eleonora de Melo', 'Pedro Quiroz', 'José Eustáquio'] },
-  { cod: 4, name: 'Equipe D', qtdMembros: 5, lider: 'João Mendes', acertos: 20, erros: 10, acertosNominais: 10, acertosReais: 15, membros: ['Maria Clara', 'João Antonio', 'Eleonora de Melo', 'Pedro Quiroz', 'José Eustáquio'] },
+  { cod: 1, nome: 'Equipe A', qtdMembros: 5, lider: 'João Mendes', acertos: 20, erros: 10, acertosNominais: 10, acertosReais: 15, membros: ['Maria Clara', 'João Antonio', 'Eleonora de Melo', 'Pedro Quiroz', 'José Eustáquio'] },
+  { cod: 2, nome: 'Equipe B', qtdMembros: 5, lider: 'João Mendes', acertos: 20, erros: 10, acertosNominais: 10, acertosReais: 15, membros: ['Maria Clara', 'João Antonio', 'Eleonora de Melo', 'Pedro Quiroz', 'José Eustáquio'] },
+  { cod: 3, nome: 'Equipe C', qtdMembros: 5, lider: 'João Mendes', acertos: 20, erros: 10, acertosNominais: 10, acertosReais: 15, membros: ['Maria Clara', 'João Antonio', 'Eleonora de Melo', 'Pedro Quiroz', 'José Eustáquio'] },
+  { cod: 4, nome: 'Equipe D', qtdMembros: 5, lider: 'João Mendes', acertos: 20, erros: 10, acertosNominais: 10, acertosReais: 15, membros: ['Maria Clara', 'João Antonio', 'Eleonora de Melo', 'Pedro Quiroz', 'José Eustáquio'] },
 ]
 
 export const cursos = [

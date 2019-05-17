@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
+import { Dispatch } from 'redux';
 import { IRootState } from 'src/store';
 import { selectLoginType } from 'src/store/app/state';
+import { deleteTeam } from 'src/store/app/team';
 import styled from 'styled-components';
 import { Button } from '../components';
 import { QuickList } from '../components/'
@@ -10,12 +12,12 @@ interface IProps {
   item: any;
 }
 
-const InfoTeam: React.SFC<IProps & IMapStateToProps> = ({ item, loginType }) => {
+const InfoTeam: React.SFC<IProps & IMapStateToProps & IMapDispatchToProps> = (props) => {
   const mistakes = require('../assets/icons/mistakes-icon.png')
   const hits = require('../assets/icons/hits-icon.png')
   const realHits = require('../assets/icons/real-hits-icon.png')
   const ratedHits = require('../assets/icons/rated-hits-icon.png')
-
+  const { item, loginType} = props;
   return (
     <Details answer={item.resposta}>
       <div className='info'>
@@ -32,7 +34,9 @@ const InfoTeam: React.SFC<IProps & IMapStateToProps> = ({ item, loginType }) => 
       </div>
       <div className='actionsButtons'>
         <QuickList text='VER MEMBROS' list={item.membros} />
-        {loginType !== 'professor' ? <Button delet>SAIR DA EQUIPE</Button> : null}
+        {loginType !== 'professor' &&
+         <Button delet handleClick={props.deleteTeamEpic(item.id)}>SAIR DA EQUIPE</Button> 
+        }
       </div>
     </Details>
   );
@@ -46,6 +50,13 @@ const mapStateToProps = (state: IRootState): IMapStateToProps => ({
   loginType: selectLoginType(state),
 });
 
+interface IMapDispatchToProps {
+  deleteTeamEpic: (idTeam: number | string) => void;
+}
+
+const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
+  deleteTeamEpic: (idTeam: number | string) => dispatch(deleteTeam.started(idTeam)),
+})
 // STYLE
 const Details = styled.div`
     display:flex;
@@ -106,4 +117,4 @@ const Details = styled.div`
       }
     }
 `
-export default connect(mapStateToProps)(InfoTeam);
+export default connect(mapStateToProps, mapDispatchToProps)(InfoTeam);

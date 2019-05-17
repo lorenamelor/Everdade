@@ -8,9 +8,12 @@ import { Dispatch } from 'redux';
 import { IRootState } from 'src/store';
 import { requestJFById, selectJFById } from 'src/store/app/jf';
 import { selectLoginType } from 'src/store/app/state';
+import { requestTeamByUserAndJF, selectTeamList } from 'src/store/app/team';
 import styled from 'styled-components';
-import { /*Button, Topics,*/
-   CreateTeam, ExpansionPanel, H1, InfoJF, Modal, NavigationBar } from '../components';
+import {
+  Button, /*Topics,*/
+  CreateTeam, ExpansionPanel, H1, InfoJF, Modal, NavigationBar
+} from '../components';
 
 interface IProps {
   match: any;
@@ -21,9 +24,10 @@ class ViewJF extends React.PureComponent<IMapStateToProps & IMapDispatchToProps 
     open: false,
   };
 
-  public componentDidMount(){
+  public componentDidMount() {
     const { match: { params } } = this.props;
     this.props.requestJFById(params.idJF);
+    this.props.requestTeamByUserAndJF(params.idJF);
   }
 
   public handleOpen = () => {
@@ -34,44 +38,54 @@ class ViewJF extends React.PureComponent<IMapStateToProps & IMapDispatchToProps 
     this.setState({ open: false });
   };
   public render() {
-    const { /*loginType,*/ JFById } = this.props;
+    const { loginType, JFById, teamList } = this.props;
+    console.log('teamList', teamList)
     if (!sessionStorage.getItem('userData')) { return <Redirect to="/" /> }
     return (
       <ViewJFWrap>
-        <NavigationBar max returnUrl={()=> this.props.history.goBack()} />
+        <NavigationBar max returnUrl={() => this.props.history.goBack()} />
         <div>
-        { JFById.jf && JFById.jf[0] &&
-        <>
-          <H1>{JFById.jf[0].nome}</H1>
-          <Card className='card'><InfoJF item={JFById.jf[0]} /></Card>
-          <div className='body'>
-            {/* <div>
-              {loginType === 'professor' ?
-                <>
-                  <div id='header'>
-                    <H1>Equipes</H1>
-                  </div>
-                  <ExpansionPanel type='team' items={listTeam} />
-                </>
-                :
-                <>
-                  <div id='header'>
-                    <H1>Equipe</H1>
-                    <Button handleClick={this.handleOpen}>CRIAR EQUIPE</Button>
-                  </div>
-                  <Card id='cardTeam'>Você não possui uma equipe</Card>
-                  <H1>Topicos</H1>
-                  <Topics />
-                </>
-              }
-            </div> */}
-            <div>
-              <H1>Fatos</H1>
-              <ExpansionPanel type='fact' items={JFById.fatos} />
-            </div>
-          </div>
-          </>
-         }
+          {JFById.jf && JFById.jf[0] &&
+            <>
+              <H1>{JFById.jf[0].nome}</H1>
+              <Card className='card'><InfoJF item={JFById.jf[0]} /></Card>
+              <div className='body'>
+                <div>
+                  {loginType === 'professor' ?
+                    <>
+                      <div id='header'>
+                        <H1>Equipes</H1>
+                      </div>
+                      <ExpansionPanel type='team' items={teamList} />
+                    </>
+                    :
+                    <>
+                      {teamList.length > 0
+                        ? 
+                        <>
+                          <H1>Equipe</H1>
+                          <ExpansionPanel type='team' items={teamList} />
+                        </>
+                        : <>
+                          <div id='header'>
+                            <H1>Equipe</H1>
+                            <Button handleClick={this.handleOpen}>CRIAR EQUIPE</Button>
+                          </div>
+                          <Card id='cardTeam'>Você não possui uma equipe</Card>
+                        </>
+                      }
+                      {/* <H1>Topicos</H1> */}
+                      {/* <Topics /> */}
+                    </>
+                  }
+                </div>
+                <div>
+                  <H1>Fatos</H1>
+                  <ExpansionPanel type='fact' items={JFById.fatos} />
+                </div>
+              </div>
+            </>
+          }
         </div>
         <Modal openModal={this.state.open} handleClose={this.handleClose} description={<CreateTeam />} width='50%' />
       </ViewJFWrap >
@@ -82,20 +96,25 @@ class ViewJF extends React.PureComponent<IMapStateToProps & IMapDispatchToProps 
 interface IMapStateToProps {
   loginType: 'professor' | 'aluno' | null;
   JFById: any;
+  teamList: any;
 };
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({
   loginType: selectLoginType(state),
   JFById: selectJFById(state),
+  teamList: selectTeamList(state),
 });
 
 
 interface IMapDispatchToProps {
   requestJFById: (idJf: number | string) => void;
+  requestTeamByUserAndJF: (idJf: number | string) => void;
+
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
   requestJFById: (idJf: number | string) => dispatch(requestJFById.started(idJf)),
+  requestTeamByUserAndJF: (idJf: number | string) => dispatch(requestTeamByUserAndJF.started(idJf)),
 })
 
 // STYLE
