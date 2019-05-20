@@ -82,17 +82,26 @@ export async function apiDeleteJF(idJF: number | string): Promise<any> {
 
 /*TEAMS*/
 
+export async function apiRequestStudentsForTeam(payload: any): Promise<any> {
+	console.log('payload', payload)
+
+	const {idJf, idClass} = payload;
+	const students: any = await axios.get(`http://localhost/everdade/index.php/equipe/selecionar?idJf=${idJf}&idTurma=${idClass}`);
+	return students.data;
+}
+
 export async function apiRequestTeamByUserAndJF(userId: number | string, JFId: number | string): Promise<any> {
 	// const TeamList: any = await axios.get(`http://localhost/everdade/index.php/equipe?idUsuario=${userId}?idJF=${JFId}`);
 		return [
-			{ cod: 1, nome: 'Equipe A', qtdMembros: 5, lider: 'João Mendes', acertos: 20, erros: 10, acertosNominais: 10, acertosReais: 15, membros: ['Maria Clara', 'João Antonio', 'Eleonora de Melo', 'Pedro Quiroz', 'José Eustáquio'] },
-			{ cod: 2, nome: 'Equipe B', qtdMembros: 5, lider: 'João Mendes', acertos: 20, erros: 10, acertosNominais: 10, acertosReais: 15, membros: ['Maria Clara', 'João Antonio', 'Eleonora de Melo', 'Pedro Quiroz', 'José Eustáquio'] },
-			{ cod: 3, nome: 'Equipe C', qtdMembros: 5, lider: 'João Mendes', acertos: 20, erros: 10, acertosNominais: 10, acertosReais: 15, membros: ['Maria Clara', 'João Antonio', 'Eleonora de Melo', 'Pedro Quiroz', 'José Eustáquio'] },
-			{ cod: 4, nome: 'Equipe D', qtdMembros: 5, lider: 'João Mendes', acertos: 20, erros: 10, acertosNominais: 10, acertosReais: 15, membros: ['Maria Clara', 'João Antonio', 'Eleonora de Melo', 'Pedro Quiroz', 'José Eustáquio'] },
+			// { cod: 1, nome: 'Equipe A', qtdMembros: 5, lider: 'João Mendes', acertos: 20, erros: 10, acertosNominais: 10, acertosReais: 15, membros: ['Maria Clara', 'João Antonio', 'Eleonora de Melo', 'Pedro Quiroz', 'José Eustáquio'] },
+			// { cod: 2, nome: 'Equipe B', qtdMembros: 5, lider: 'João Mendes', acertos: 20, erros: 10, acertosNominais: 10, acertosReais: 15, membros: ['Maria Clara', 'João Antonio', 'Eleonora de Melo', 'Pedro Quiroz', 'José Eustáquio'] },
+			// { cod: 3, nome: 'Equipe C', qtdMembros: 5, lider: 'João Mendes', acertos: 20, erros: 10, acertosNominais: 10, acertosReais: 15, membros: ['Maria Clara', 'João Antonio', 'Eleonora de Melo', 'Pedro Quiroz', 'José Eustáquio'] },
+			// { cod: 4, nome: 'Equipe D', qtdMembros: 5, lider: 'João Mendes', acertos: 20, erros: 10, acertosNominais: 10, acertosReais: 15, membros: ['Maria Clara', 'João Antonio', 'Eleonora de Melo', 'Pedro Quiroz', 'José Eustáquio'] },
 		]
 }
 
 export async function apiTeamRegistration(payload: any): Promise<{ data: { msg: any } }>  {
+	console.log('alunos payload', payload);
 	return axios.post(`http://localhost/everdade/index.php/equipe/cadastrar`, { ...payload});
 }
 

@@ -21,6 +21,7 @@ export const selectStudents: Selector<[]> = ({ classReducer }) => classReducer.s
 export const selectIsClassRegistration: Selector<boolean> = ({ classReducer }) => classReducer.isClassRegistration;
 export const selectClassById: Selector<IClass> = ({ classReducer }) => classReducer.classById;
 export const selectClassByUserId: Selector<IClass> = ({ classReducer }) => classReducer.classByUserId;
+export const select: Selector<IClass> = ({ classReducer }) => classReducer.classByUserId;
 
 export interface IUserSignUp {curso?
 	:string; email:string; login:string; nome: string; senha: string; tipo:string }

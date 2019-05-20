@@ -6,28 +6,36 @@ import { reducerWithInitialState } from 'typescript-fsa-reducers/dist';
 import { Epic, Selector } from '..';
 import {
   apiDeleteTeam,
+  apiRequestStudentsForTeam,
   apiRequestTeamByUserAndJF,
-  apiTeamRegistration,
+  apiTeamRegistration
 } from '../../services/api';
 import { getUser } from './state';
 
 // SELECTORS
 export const selectTeamList: Selector<[]> = ({ teamReducer }) => teamReducer.teamList;
+export const selectStudentsList: Selector<[]> = ({ teamReducer }) => teamReducer.studentsList;
+export const selectIsTeamRegistration: Selector<[]> = ({ teamReducer }) => teamReducer.isTeamRegistration;
 
 // ACTIONS
 const actionCreator = actionCreatorFactory('APP::TEAM');
 export const requestTeamByUserAndJF = actionCreator.async<any, any, any>('REQUEST_TEAM_BY_USER_AND_JF');
 export const teamRegistration = actionCreator.async<any, any, any>('TEAM_REGISTRATION');
 export const deleteTeam = actionCreator.async<any, any, any>('DELETE_TEAM');
-
+export const requestStudentsForTeam = actionCreator.async<any, any, any>('REQUEST_STUDENTS_FOR_TEAM');
+export const setIsTeamRegistration = actionCreator('IS_TEAM_REGISTRATION');
 
 // STATE
 export interface IState {
-  teamList: {},
+  teamList: [],
+  studentsList: [],
+  isTeamRegistration: boolean,
 }
 
 const INITIAL_STATE: IState = {
-  teamList: {},
+  teamList: [],
+  studentsList: [],
+  isTeamRegistration: false,
 };
 
 // REDUCER
@@ -35,6 +43,14 @@ export default reducerWithInitialState(INITIAL_STATE)
   .case(requestTeamByUserAndJF.done, (state: IState, { result: teamList }) => ({
     ...state,
     teamList,
+  }))
+  .case(requestStudentsForTeam.done, (state: IState, { result: studentsList }) => ({
+    ...state,
+    studentsList,
+  }))
+  .cases([teamRegistration.done, setIsTeamRegistration], (state: IState) => ({
+    ...state,
+    isTeamRegistration: !state.isTeamRegistration,
   }))
   .build();
 
@@ -48,21 +64,13 @@ const requestTeamByUserAndJFEpic: Epic = (action$) => action$.pipe(
     )),
   ));
 
-// const requestTeamByUserAndJFEpic2: Epic = (action$) => action$.pipe(
-//   filter(teamRegistration.done.match),
-//   mergeMap((jfId) => from(apiRequestTeamByUserAndJF(getUser('id_usuario'), jfId.payload)).pipe(
-//     map((teamList) => (requestTeamByUserAndJF.done({ result: teamList })),
-//       catchError((error) => of(requestTeamByUserAndJF.failed({ error }))),
-//     )),
-//   ));
-
-// const requestTeamByUserAndJFEpic3: Epic = (action$) => action$.pipe(
-//   filter(deleteTeam.done.match),
-//   mergeMap((jfId) => from(apiRequestTeamByUserAndJF(getUser('id_usuario'), jfId.payload)).pipe(
-//     map((teamList) => (requestTeamByUserAndJF.done({ result: teamList })),
-//       catchError((error) => of(requestTeamByUserAndJF.failed({ error }))),
-//     )),
-//   ));
+  const requestStudentsForTeamEpic: Epic = (action$) => action$.pipe(
+    filter(requestStudentsForTeam.started.match),
+    mergeMap(({ payload }) => from(apiRequestStudentsForTeam(payload)).pipe(
+      map((studentsList) => (requestStudentsForTeam.done({ result: studentsList.alunos })),
+        catchError((error) => of(requestStudentsForTeam.failed({ error }))),
+      )),
+    ));
 
 const TeamRegistrationEpic: Epic = (action$) => action$.pipe(
   filter(teamRegistration.started.match),
@@ -82,6 +90,7 @@ const deleteTeamEpic: Epic = (action$) => action$.pipe(
 
 export const epics = combineEpics(
   requestTeamByUserAndJFEpic,
+  requestStudentsForTeamEpic,
   // requestTeamByUserAndJFEpic2,
   // requestTeamByUserAndJFEpic3,
   TeamRegistrationEpic,

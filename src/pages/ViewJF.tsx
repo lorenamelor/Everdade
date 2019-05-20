@@ -6,13 +6,13 @@ import * as React from 'react';
 import { Redirect } from 'react-router';
 import { Dispatch } from 'redux';
 import { IRootState } from 'src/store';
+import { selectIsClassRegistration } from 'src/store/app/class';
 import { requestJFById, selectJFById } from 'src/store/app/jf';
 import { selectLoginType } from 'src/store/app/state';
-import { requestTeamByUserAndJF, selectTeamList } from 'src/store/app/team';
+import { requestTeamByUserAndJF, selectTeamList, setIsTeamRegistration } from 'src/store/app/team';
 import styled from 'styled-components';
 import {
-  Button, /*Topics,*/
-  CreateTeam, ExpansionPanel, H1, InfoJF, Modal, NavigationBar
+  Button, CreateTeam, ExpansionPanel, H1, InfoJF, Modal, NavigationBar
 } from '../components';
 
 interface IProps {
@@ -30,6 +30,12 @@ class ViewJF extends React.PureComponent<IMapStateToProps & IMapDispatchToProps 
     this.props.requestTeamByUserAndJF(params.idJF);
   }
 
+  public componentDidUpdate(oldProps: any) {
+    if(oldProps.isTeamRegistration !== this.props.isTeamRegistration){
+      this.props.setIsTeamRegistration();
+    }
+  }
+
   public handleOpen = () => {
     this.setState({ open: true });
   };
@@ -38,8 +44,10 @@ class ViewJF extends React.PureComponent<IMapStateToProps & IMapDispatchToProps 
     this.setState({ open: false });
   };
   public render() {
-    const { loginType, JFById, teamList } = this.props;
-    console.log('teamList', teamList)
+
+    const { loginType, JFById, teamList,  match: { params : { idJF } } } = this.props;
+    console.log('JFById', JFById);
+
     if (!sessionStorage.getItem('userData')) { return <Redirect to="/" /> }
     return (
       <ViewJFWrap>
@@ -84,10 +92,10 @@ class ViewJF extends React.PureComponent<IMapStateToProps & IMapDispatchToProps 
                   <ExpansionPanel type='fact' items={JFById.fatos} />
                 </div>
               </div>
+              <Modal openModal={this.state.open} handleClose={this.handleClose} description={<CreateTeam idJf={idJF} idClass={JFById.jf[0].turma_id_turma1} closeModal={this.handleClose}/>} width='50%' />
             </>
           }
         </div>
-        <Modal openModal={this.state.open} handleClose={this.handleClose} description={<CreateTeam />} width='50%' />
       </ViewJFWrap >
     );
   }
@@ -97,24 +105,27 @@ interface IMapStateToProps {
   loginType: 'professor' | 'aluno' | null;
   JFById: any;
   teamList: any;
+  isTeamRegistration: boolean;
 };
 
 const mapStateToProps = (state: IRootState): IMapStateToProps => ({
   loginType: selectLoginType(state),
   JFById: selectJFById(state),
   teamList: selectTeamList(state),
+  isTeamRegistration: selectIsClassRegistration(state),
 });
 
 
 interface IMapDispatchToProps {
   requestJFById: (idJf: number | string) => void;
   requestTeamByUserAndJF: (idJf: number | string) => void;
-
+  setIsTeamRegistration: () => void;
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
   requestJFById: (idJf: number | string) => dispatch(requestJFById.started(idJf)),
   requestTeamByUserAndJF: (idJf: number | string) => dispatch(requestTeamByUserAndJF.started(idJf)),
+  setIsTeamRegistration: () => dispatch(setIsTeamRegistration()),
 })
 
 // STYLE

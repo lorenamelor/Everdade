@@ -13,10 +13,10 @@ interface IProps {
 }
 
 const InfoTeam: React.SFC<IProps & IMapStateToProps & IMapDispatchToProps> = (props) => {
-  const mistakes = require('../assets/icons/mistakes-icon.png')
-  const hits = require('../assets/icons/hits-icon.png')
-  const realHits = require('../assets/icons/real-hits-icon.png')
-  const ratedHits = require('../assets/icons/rated-hits-icon.png')
+  // const mistakes = require('../assets/icons/mistakes-icon.png')
+  // const hits = require('../assets/icons/hits-icon.png')
+  // const realHits = require('../assets/icons/real-hits-icon.png')
+  // const ratedHits = require('../assets/icons/rated-hits-icon.png')
   const { item, loginType} = props;
   return (
     <Details answer={item.resposta}>
@@ -25,17 +25,17 @@ const InfoTeam: React.SFC<IProps & IMapStateToProps & IMapDispatchToProps> = (pr
           <p>Qtd de membros: <span>{item.qtdMembros}</span></p>
           <p>Líder: <span>{item.lider}</span></p>
         </div>
-        <div>
+        {/* <div>
           <div><img src={hits} /><p>Acertos: <span>{item.acertos}</span></p></div>
           <div><img src={mistakes} /><p>Erros: <span>{item.erros}</span></p></div>
           <div><img src={ratedHits} /><p>Acertos Nominais: <span>{item.acertosNominais}</span></p></div>
           <div><img src={realHits} /><p>Acertos Reais: <span>{item.acertosReais}</span></p></div>
-        </div>
+        </div> */}
       </div>
       <div className='actionsButtons'>
         <QuickList text='VER MEMBROS' list={item.membros} />
         {loginType !== 'professor' &&
-         <Button delet handleClick={props.deleteTeamEpic(item.id)}>SAIR DA EQUIPE</Button> 
+         <Button delet handleClick={props.deleteTeam(item.id)}>SAIR DA EQUIPE</Button> 
         }
       </div>
     </Details>
@@ -51,11 +51,11 @@ const mapStateToProps = (state: IRootState): IMapStateToProps => ({
 });
 
 interface IMapDispatchToProps {
-  deleteTeamEpic: (idTeam: number | string) => void;
+  deleteTeam: (idTeam: number | string) => void;
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
-  deleteTeamEpic: (idTeam: number | string) => dispatch(deleteTeam.started(idTeam)),
+  deleteTeam: (idTeam: number | string) => dispatch(deleteTeam.started(idTeam)),
 })
 // STYLE
 const Details = styled.div`
