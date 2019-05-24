@@ -2,9 +2,9 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import { Dispatch } from 'redux';
-import { IRootState } from 'src/store';
-import { deleteClass, requestClassByUserId, selectClassByUserId } from 'src/store/app/class';
-import { getUser, selectLoginType, selectSignInSuccess } from 'src/store/app/state';
+import { IRootState } from '../store';
+import { deleteClass, requestClassByUserId, selectClassByUserId } from '../store/app/class';
+import { getUser, selectLoginType, selectSignInSuccess } from '../store/app/state';
 import styled from 'styled-components';
 import { Button, ClassList, H1, KeepClass, Modal, NavigationBar } from '../components';
 

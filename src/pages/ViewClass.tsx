@@ -6,12 +6,12 @@ import { connect } from 'react-redux';
 import * as React from 'react';
 import { Redirect } from 'react-router';
 import { Dispatch } from 'redux';
-import { IRootState } from 'src/store';
+import { IRootState } from '../store';
 import {
   requestClassById, selectClassById,
-} from 'src/store/app/class';
-import { deleteJF, requestJFByClassId, selectJFByClassId } from 'src/store/app/jf';
-import { selectLoginType } from 'src/store/app/state';
+} from '../store/app/class';
+import { deleteJF, requestJFByClassId, selectJFByClassId } from '../store/app/jf';
+import { selectLoginType } from '../store/app/state';
 import styled from 'styled-components';
 import { ExpansionPanel, H1, KeepJF, Modal, NavigationBar } from '../components';
 

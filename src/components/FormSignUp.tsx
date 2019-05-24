@@ -3,12 +3,12 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { Dispatch } from 'redux';
-import { IRootState } from 'src/store';
+import { IRootState } from '../store';
 import styled from 'styled-components';
 import * as Yup from 'yup';
 
 import { FormControlLabel, InputAdornment, MenuItem, Radio, RadioGroup, TextField } from '@material-ui/core';
-import { IUserSignUp, requestCourses, selectCourses, selectIsSignUp, selectSignUpSuccess, signUp } from 'src/store/app/state';
+import { IUserSignUp, requestCourses, selectCourses, selectIsSignUp, selectSignUpSuccess, signUp } from '../store/app/state';
 import { Button } from '../components';
 
 // validate form

@@ -11,9 +11,15 @@
 		"jsx-boolean-value": false,
     "object-literal-sort-keys": false,
     "no-console": false,
-    "jsx-no-lambda":false
+    "jsx-no-lambda":false,
+    "interface-name": false,
+    "ordered-imports": false
   },
   "jsRules": {
-    "no-console": false
+    "no-console": false,
+    "interface-name": false,
+    "ordered-imports": false
+
+
   }
 }

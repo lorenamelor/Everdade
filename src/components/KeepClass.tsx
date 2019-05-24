@@ -2,12 +2,12 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { IRootState } from 'src/store';
+import { IRootState } from '../store';
 import {
   classEdit, classRegistration, requestClassById, requestStudents, 
   requestUnits, selectClassById, selectIsClassRegistration, selectStudents, selectUnits,
-} from 'src/store/app/class';
-import { requestCourses, selectCourses } from 'src/store/app/state';
+} from '../store/app/class';
+import { requestCourses, selectCourses } from '../store/app/state';
 import { cursos, unidades } from '../assets/mock';
 import { H1 } from '../components'
 

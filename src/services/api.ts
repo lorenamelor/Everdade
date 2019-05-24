@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getUser } from '../store/app/state';
 
 /*SIGN UP*/
 export async function apiSignUp(payload: any): Promise<{ data: { msg: any } }>  {
@@ -67,7 +68,8 @@ export async function apiJFEdit(payload: any): Promise<{ data: { msg: any } }>  
 }
 
 export async function apiRequestJFById(idjf: number | string): Promise<any> {
-	const JFById: any = await axios.get(`http://localhost/everdade/index.php/jf/selecionar?idJf=${idjf}`);
+	const idUsuario = getUser('id_usuario');
+	const JFById: any = await axios.get(`http://localhost/everdade/index.php/jf/selecionar?idUsuario=${idUsuario}&idJf=${idjf}`);
 	return JFById.data;
 }
 
@@ -84,28 +86,26 @@ export async function apiDeleteJF(idJF: number | string): Promise<any> {
 
 export async function apiRequestStudentsForTeam(payload: any): Promise<any> {
 	console.log('payload', payload)
+	const idUsuario = getUser('id_usuario');
 
 	const {idJf, idClass} = payload;
-	const students: any = await axios.get(`http://localhost/everdade/index.php/equipe/selecionar?idJf=${idJf}&idTurma=${idClass}`);
+	const students: any = await axios.get(`http://localhost/everdade/index.php/equipe/selecionar?idJf=${idJf}&idTurma=${idClass}&idUsuario=${idUsuario}`);
 	return students.data;
 }
 
 export async function apiRequestTeamByUserAndJF(userId: number | string, JFId: number | string): Promise<any> {
-	// const TeamList: any = await axios.get(`http://localhost/everdade/index.php/equipe?idUsuario=${userId}?idJF=${JFId}`);
-		return [
-			// { cod: 1, nome: 'Equipe A', qtdMembros: 5, lider: 'João Mendes', acertos: 20, erros: 10, acertosNominais: 10, acertosReais: 15, membros: ['Maria Clara', 'João Antonio', 'Eleonora de Melo', 'Pedro Quiroz', 'José Eustáquio'] },
-			// { cod: 2, nome: 'Equipe B', qtdMembros: 5, lider: 'João Mendes', acertos: 20, erros: 10, acertosNominais: 10, acertosReais: 15, membros: ['Maria Clara', 'João Antonio', 'Eleonora de Melo', 'Pedro Quiroz', 'José Eustáquio'] },
-			// { cod: 3, nome: 'Equipe C', qtdMembros: 5, lider: 'João Mendes', acertos: 20, erros: 10, acertosNominais: 10, acertosReais: 15, membros: ['Maria Clara', 'João Antonio', 'Eleonora de Melo', 'Pedro Quiroz', 'José Eustáquio'] },
-			// { cod: 4, nome: 'Equipe D', qtdMembros: 5, lider: 'João Mendes', acertos: 20, erros: 10, acertosNominais: 10, acertosReais: 15, membros: ['Maria Clara', 'João Antonio', 'Eleonora de Melo', 'Pedro Quiroz', 'José Eustáquio'] },
-		]
+	// const TeamList: any = await axios.get(`http://localhost/everdade/index.php/equipe?idUsuario=${userId}&idJf=${JFId}`);
+	// console.log('TeamList', TeamList);
+	return [];
 }
 
 export async function apiTeamRegistration(payload: any): Promise<{ data: { msg: any } }>  {
-	console.log('alunos payload', payload);
 	return axios.post(`http://localhost/everdade/index.php/equipe/cadastrar`, { ...payload});
 }
 
 export async function apiDeleteTeam(userId:number | string, idTeam: number | string): Promise<any> {
-	return axios.delete(`http://localhost/everdade/index.php/equipe/apagar?idUsuario=${userId}?idEquipe=${idTeam}`);
+	console.log('equipe', userId, idTeam);
+
+	return axios.delete(`http://localhost/everdade/index.php/equipe/apagar?idUsuario=${userId}&idEquipe=${idTeam}`);
 }
 

@@ -4,6 +4,7 @@ import Card from '@material-ui/core/Card';
 import styled from 'styled-components';
 
 // tslint:disable-next-line:no-empty-interface
+// tslint:disable-next-line:interface-name
 interface Iprops {
   item?: any;
 }

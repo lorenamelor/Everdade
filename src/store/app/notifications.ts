@@ -9,6 +9,7 @@ import actionCreatorFactory from 'typescript-fsa';
 import { classEdit, classRegistration, deleteClass } from './class';
 import { deleteJF, JFRegistration } from './jf';
 import { signIn, signUp } from './state';
+import { teamRegistration } from './team';
 
 
 const actionCreator = actionCreatorFactory('APP::NOTIFICATION');
@@ -74,6 +75,12 @@ const JFRegistrationEpic: Epic = (action$) => action$.pipe(
   mapTo(showToast())
 )
 
+const TeamRegistrationEpic: Epic = (action$) => action$.pipe(
+  filter(teamRegistration.done.match),
+  tap(() => toatSuccess("Equipe cadastrada!")),
+  mapTo(showToast())
+)
+
 
 export const epics = combineEpics(
   signUpSuccessEpic,
@@ -85,4 +92,5 @@ export const epics = combineEpics(
   deleteClassEpic,
   deleteJFEpic,
   JFRegistrationEpic,
+  TeamRegistrationEpic,
 );

@@ -5,7 +5,7 @@ import Btn from '@material-ui/core/Button';
 import { Link } from 'react-router-dom'
 import styled from 'styled-components';
 
-import { IRootState } from 'src/store';
+import { IRootState } from '../../store';
 import { selectLoginType } from '../../store/app/state';
 
 interface Iprops {

@@ -33,7 +33,6 @@ class QuickList extends React.Component<IProps, IState> {
   public render() {
     const { text, list } = this.props;
     const { open } = this.state;
-
     return (
       <QuickListWrap>
         <ClickAwayListener onClickAway={this.handleClickAway}>
@@ -42,7 +41,7 @@ class QuickList extends React.Component<IProps, IState> {
             {open ? (
               <Paper className='paper'>
                 {map(list, (item) =>
-                  <p>{item}</p>
+                  <p>{item.nome}</p>
                 )}
               </Paper>
             ) : null}

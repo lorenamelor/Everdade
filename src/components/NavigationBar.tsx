@@ -2,8 +2,8 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom'
 import { Dispatch } from 'redux';
-import { IRootState } from 'src/store';
-import { selectIsSignOut, signOut } from 'src/store/app/state';
+import { IRootState } from '../store';
+import { selectIsSignOut, signOut } from '../store/app/state';
 import styled from 'styled-components';
 
 interface IProps {

@@ -15,7 +15,7 @@ import { getUser } from './state';
 // SELECTORS
 export const selectTeamList: Selector<[]> = ({ teamReducer }) => teamReducer.teamList;
 export const selectStudentsList: Selector<[]> = ({ teamReducer }) => teamReducer.studentsList;
-export const selectIsTeamRegistration: Selector<[]> = ({ teamReducer }) => teamReducer.isTeamRegistration;
+export const selectIsTeamRegistration: Selector<boolean> = ({ teamReducer }) => teamReducer.isTeamRegistration;
 
 // ACTIONS
 const actionCreator = actionCreatorFactory('APP::TEAM');
@@ -48,7 +48,7 @@ export default reducerWithInitialState(INITIAL_STATE)
     ...state,
     studentsList,
   }))
-  .cases([teamRegistration.done, setIsTeamRegistration], (state: IState) => ({
+  .cases([teamRegistration.done, deleteTeam.done, setIsTeamRegistration], (state: IState) => ({
     ...state,
     isTeamRegistration: !state.isTeamRegistration,
   }))

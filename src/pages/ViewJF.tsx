@@ -5,15 +5,15 @@ import { connect } from 'react-redux';
 import * as React from 'react';
 import { Redirect } from 'react-router';
 import { Dispatch } from 'redux';
-import { IRootState } from 'src/store';
-import { selectIsClassRegistration } from 'src/store/app/class';
-import { requestJFById, selectJFById } from 'src/store/app/jf';
-import { selectLoginType } from 'src/store/app/state';
-import { requestTeamByUserAndJF, selectTeamList, setIsTeamRegistration } from 'src/store/app/team';
 import styled from 'styled-components';
 import {
   Button, CreateTeam, ExpansionPanel, H1, InfoJF, Modal, NavigationBar
 } from '../components';
+import ShowFact from '../components/showFact';
+import { IRootState } from '../store';
+import { requestJFById, selectJFById } from '../store/app/jf';
+import { selectLoginType } from '../store/app/state';
+import { requestTeamByUserAndJF, selectTeamList, setIsTeamRegistration, selectIsTeamRegistration } from '../store/app/team';
 
 interface IProps {
   match: any;
@@ -22,31 +22,35 @@ interface IProps {
 class ViewJF extends React.PureComponent<IMapStateToProps & IMapDispatchToProps & IProps> {
   public state = {
     open: false,
+    answerFacts: false,
   };
 
   public componentDidMount() {
     const { match: { params } } = this.props;
     this.props.requestJFById(params.idJF);
-    this.props.requestTeamByUserAndJF(params.idJF);
   }
 
   public componentDidUpdate(oldProps: any) {
-    if(oldProps.isTeamRegistration !== this.props.isTeamRegistration){
+    console.log('this.props.isTeamRegistration', this.props.isTeamRegistration);
+    if(this.props.isTeamRegistration === true){
+      const { match: { params } } = this.props;
+      this.props.requestJFById(params.idJF);
+      console.log('chamou novamente')
       this.props.setIsTeamRegistration();
     }
   }
 
-  public handleOpen = () => {
-    this.setState({ open: true });
+  public handleOpen = (modal: string) => () => {
+    this.setState({ [modal]: true });
   };
 
-  public handleClose = () => {
-    this.setState({ open: false });
+  public handleClose = (modal: string) => () => {
+    this.setState({ [modal]: false });
   };
+
   public render() {
 
-    const { loginType, JFById, teamList,  match: { params : { idJF } } } = this.props;
-    console.log('JFById', JFById);
+    const { loginType, JFById, match: { params : { idJF } } } = this.props;
 
     if (!sessionStorage.getItem('userData')) { return <Redirect to="/" /> }
     return (
@@ -64,20 +68,20 @@ class ViewJF extends React.PureComponent<IMapStateToProps & IMapDispatchToProps 
                       <div id='header'>
                         <H1>Equipes</H1>
                       </div>
-                      <ExpansionPanel type='team' items={teamList} />
+                      <ExpansionPanel type='team' items={JFById.equipes} />
                     </>
                     :
                     <>
-                      {teamList.length > 0
+                      {JFById.equipes.length > 0
                         ? 
                         <>
                           <H1>Equipe</H1>
-                          <ExpansionPanel type='team' items={teamList} />
+                          <ExpansionPanel type='team' items={JFById.equipes} />
                         </>
                         : <>
                           <div id='header'>
                             <H1>Equipe</H1>
-                            <Button handleClick={this.handleOpen}>CRIAR EQUIPE</Button>
+                            <Button handleClick={this.handleOpen('open')}>CRIAR EQUIPE</Button>
                           </div>
                           <Card id='cardTeam'>Você não possui uma equipe</Card>
                         </>
@@ -87,12 +91,28 @@ class ViewJF extends React.PureComponent<IMapStateToProps & IMapDispatchToProps 
                     </>
                   }
                 </div>
-                <div>
-                  <H1>Fatos</H1>
-                  <ExpansionPanel type='fact' items={JFById.fatos} />
-                </div>
+                {(loginType === 'professor' ||
+                 ((loginType === 'aluno' || loginType === 'lider') && 
+                 JFById.jf[0].status === 'Finalizado'))
+                  ?  <div>
+                      <H1>Fatos</H1>
+                      <ExpansionPanel type='fact' items={JFById.fatos} />
+                    </div>
+                  : ((loginType === 'aluno' || loginType === 'lider') && 
+                  JFById.jf[0].status === 'Em execucao') 
+                  ?
+                    <div style={{alignItems: 'center', display: 'flex'}}>
+                      <H1>Fatos</H1>
+                      <ContainerFact>
+                        <Button handleClick={this.handleOpen('answerFacts')}>RESPONDER FATOS</Button>
+                      </ContainerFact>
+                    </div>
+                  : null
+               }
+               
               </div>
-              <Modal openModal={this.state.open} handleClose={this.handleClose} description={<CreateTeam idJf={idJF} idClass={JFById.jf[0].turma_id_turma1} closeModal={this.handleClose}/>} width='50%' />
+              <Modal openModal={this.state.answerFacts} handleClose={this.handleClose('answerFacts')} description={<ShowFact facts={JFById.fatos} idJf={idJF} maxTime={JFById.jf[0].tempo_max_exib} closeModal={this.handleClose('answerFacts')}/>} width='50%' />
+              <Modal openModal={this.state.open} handleClose={this.handleClose('open')} description={<CreateTeam idJf={idJF} maxStudents={JFById.jf[0].quantidade_alunos_equipe} idClass={JFById.jf[0].turma_id_turma1} closeModal={this.handleClose('open')}/>} width='50%' />
             </>
           }
         </div>
@@ -112,7 +132,7 @@ const mapStateToProps = (state: IRootState): IMapStateToProps => ({
   loginType: selectLoginType(state),
   JFById: selectJFById(state),
   teamList: selectTeamList(state),
-  isTeamRegistration: selectIsClassRegistration(state),
+  isTeamRegistration: selectIsTeamRegistration(state),
 });
 
 
@@ -158,6 +178,14 @@ const ViewJFWrap = styled.div`
     color: #636363;
     padding:30px;
   }
+`;
+
+const ContainerFact = styled.div`
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewJF);

@@ -6,7 +6,7 @@ import {
 import { Form, Formik, } from 'formik';
 import { filter } from 'lodash';
 import * as React from 'react';
-import { getUser } from 'src/store/app/state';
+import { getUser } from '../store/app/state';
 import styled from 'styled-components';
 import * as Yup from 'yup';
 import { Button } from '../components'

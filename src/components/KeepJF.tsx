@@ -6,8 +6,8 @@ import { FieldArray, Form, Formik } from 'formik';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { IRootState } from 'src/store';
-import { JFEdit, JFRegistration, requestJFById, selectIsJFRegistration, selectJFById } from 'src/store/app/jf';
+import { IRootState } from '../store';
+import { JFEdit, JFRegistration, requestJFById, selectIsJFRegistration, selectJFById } from '../store/app/jf';
 import styled from 'styled-components';
 import * as Yup from 'yup';
 import { Button, H1 } from '../components'

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { IRootState } from 'src/store';
-import { selectLoginType } from 'src/store/app/state';
+import { IRootState } from '../store';
+import { selectLoginType } from '../store/app/state';
 import styled from 'styled-components';
 import { QuickList } from '../components/'
 

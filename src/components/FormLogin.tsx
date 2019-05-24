@@ -3,11 +3,11 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom'
 import { Dispatch } from 'redux';
-import { IRootState } from 'src/store';
+import { IRootState } from '../store';
 import styled from 'styled-components';
 
 import { InputAdornment, TextField } from '@material-ui/core';
-import { resetSignOut, selectSignInSuccess, signIn } from 'src/store/app/state';
+import { resetSignOut, selectSignInSuccess, signIn } from '../store/app/state';
 import { Button } from '../components'
 
 class FormLogin extends React.Component<IMapDispatchToProps & IMapStateToProps>{

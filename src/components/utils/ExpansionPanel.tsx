@@ -7,10 +7,10 @@ import Tooltip from '@material-ui/core/Tooltip';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { map } from 'lodash';
 import { connect } from 'react-redux';
-import { IRootState } from 'src/store';
-import { selectLoginType } from 'src/store/app/state';
 import styled from 'styled-components';
 import { ActionsButtons, InfoFact, InfoJF, InfoTeam } from '../'
+import { IRootState } from '../../store';
+import { selectLoginType } from '../../store/app/state';
 
 interface IProps {
   buttons?: boolean;
@@ -29,7 +29,7 @@ class ExpansionPanels extends React.Component<IProps & IMapStateToProps> {
   public render() {
     const { expanded } = this.state;
     const { buttons, type, items, loginType, onClickEdit, handleDelete, handleIdItem } = this.props;
-
+    console.log('items',items);
     return (
       <div>
         
@@ -38,7 +38,7 @@ class ExpansionPanels extends React.Component<IProps & IMapStateToProps> {
             return null
           }
           else {
-            const itemId = type === 'jf' ? item.id_jf : (type === 'fact' ? item.id_fato : item.id);
+            const itemId = type === 'jf' ? item.id_jf : (type === 'fact' ? item.id_fato : item.id_equipe);
             return (
               <ExpansionPanelWrap key={itemId} expanded={expanded === itemId} onChange={this.handleChange(itemId)}>
                 <ExpansionPanelSummary className='summary' expandIcon={<ExpandMoreIcon />}>
@@ -48,7 +48,7 @@ class ExpansionPanels extends React.Component<IProps & IMapStateToProps> {
                         <Highlighter color={this.handleColorHighlight(item.status!)} />
                       </Tooltip>
                       : null}
-                    { type === 'jf' || type === 'team' ? item.nome : `Fato ${index + 1}`}
+                    { type === 'jf' ? item.nome : type === 'team' ? `Equipe ${index + 1}` : `Fato ${index + 1}`}
                   </p>
                   {buttons ? <ActionsButtons 
                     viewUrl='/jf' 

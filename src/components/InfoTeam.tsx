@@ -2,28 +2,36 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { Dispatch } from 'redux';
-import { IRootState } from 'src/store';
-import { selectLoginType } from 'src/store/app/state';
-import { deleteTeam } from 'src/store/app/team';
 import styled from 'styled-components';
 import { Button } from '../components';
 import { QuickList } from '../components/'
+import { IRootState } from '../store';
+import { selectLoginType } from '../store/app/state';
+import { deleteTeam, setIsTeamRegistration } from '../store/app/team';
 interface IProps {
   item: any;
 }
 
-const InfoTeam: React.SFC<IProps & IMapStateToProps & IMapDispatchToProps> = (props) => {
+class InfoTeam extends React.Component<IProps & IMapStateToProps & IMapDispatchToProps>  {
+  
+   public delete = (id: any) => () => {
+    this.props.deleteTeam(id);
+    this.props.setIsTeamRegistration();
+  }
+
+  public render(){
   // const mistakes = require('../assets/icons/mistakes-icon.png')
   // const hits = require('../assets/icons/hits-icon.png')
   // const realHits = require('../assets/icons/real-hits-icon.png')
   // const ratedHits = require('../assets/icons/rated-hits-icon.png')
-  const { item, loginType} = props;
+
+  const { item, loginType} = this.props;
   return (
-    <Details answer={item.resposta}>
+    <Details>
       <div className='info'>
         <div>
-          <p>Qtd de membros: <span>{item.qtdMembros}</span></p>
-          <p>Líder: <span>{item.lider}</span></p>
+          <p>Qtd de membros: <span>{item.equipe[0].tamanho}</span></p>
+          <p>Líder: <span>{item.equipe[0].id_lider}</span></p>
         </div>
         {/* <div>
           <div><img src={hits} /><p>Acertos: <span>{item.acertos}</span></p></div>
@@ -33,13 +41,14 @@ const InfoTeam: React.SFC<IProps & IMapStateToProps & IMapDispatchToProps> = (pr
         </div> */}
       </div>
       <div className='actionsButtons'>
-        <QuickList text='VER MEMBROS' list={item.membros} />
+        <QuickList text='VER MEMBROS' list={item.alunos} />
         {loginType !== 'professor' &&
-         <Button delet handleClick={props.deleteTeam(item.id)}>SAIR DA EQUIPE</Button> 
+         <Button delet handleClick={this.delete(item.equipe[0].id_equipe)}>SAIR DA EQUIPE</Button> 
         }
       </div>
     </Details>
   );
+}
 }
 
 interface IMapStateToProps {
@@ -52,10 +61,13 @@ const mapStateToProps = (state: IRootState): IMapStateToProps => ({
 
 interface IMapDispatchToProps {
   deleteTeam: (idTeam: number | string) => void;
+  setIsTeamRegistration: () => void;
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): IMapDispatchToProps => ({
   deleteTeam: (idTeam: number | string) => dispatch(deleteTeam.started(idTeam)),
+  setIsTeamRegistration: () => dispatch(setIsTeamRegistration()),
+
 })
 // STYLE
 const Details = styled.div`
@@ -78,13 +90,14 @@ const Details = styled.div`
       >div:first-child{
         display: flex;
         flex-wrap: wrap;
+        justify-content: flex-start;
         >p{
-          margin-right:5%;
+          margin-right:15px;
         }
       }
       >div:last-child{
         display: flex;
-        justify-content: space-between;
+        /* justify-content: space-between; */
         flex-grow:2;
         margin-left: 10px;
         flex-wrap: wrap;
